@@ -1,10 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Phone, X, Thermometer, Truck, Star } from "lucide-react";
 import Logo from "./Logo";
 import { useLead } from "@/components/lead/LeadProvider";
-import { img, NAV_LINKS, PHONE, PHONE_HREF } from "@/lib/site";
+import { NAV_LINKS, PHONE, PHONE_HREF, pic } from "@/lib/site";
 
 const STATS = [
   { value: "12 лет", label: "чиним окна в Краснодаре" },
@@ -12,6 +11,17 @@ const STATS = [
   { value: "до 3 лет", label: "гарантия на работы" },
   { value: "1 визит", label: "на большинство ремонтов" },
 ];
+
+const delay = (s: number): React.CSSProperties => ({ animationDelay: s + "s" });
+
+function LiveDot() {
+  return (
+    <span className="relative flex h-2 w-2 shrink-0">
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+    </span>
+  );
+}
 
 export default function Hero() {
   const lead = useLead();
@@ -25,224 +35,165 @@ export default function Hero() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!menu) return;
+    const close = () => setMenu(false);
+    window.addEventListener("scroll", close, { passive: true, once: true });
+    return () => window.removeEventListener("scroll", close);
+  }, [menu]);
+
   const callMaster = () =>
     lead.openForm({
       source: "Hero: вызвать мастера",
       title: "Вызвать мастера бесплатно",
-      subtitle: "Перезвоним за 5 минут, согласуем время. Выезд и диагностика — 0 ₽ при заказе ремонта.",
+      subtitle: "Перезвоним за 5 минут и согласуем время. Выезд и диагностика — 0 ₽ при заказе ремонта.",
       image: "measure",
-      badge: "● Мастер свободен сегодня",
+      badge: "Мастер свободен сегодня",
       withComment: true,
     });
 
   return (
-    <section className="min-h-[100svh] md:min-h-[108vh] flex flex-col bg-ink relative w-full overflow-hidden">
-      {/* Background photo with slow cinematic zoom */}
-      <motion.img
-        src={img("hero")}
+    <section className="relative w-full min-h-[100svh] md:min-h-[100vh] flex flex-col bg-ink overflow-hidden">
+      {/* Background: static (no transform animation under the glass panels → no per-frame re-blur) */}
+      <img
+        {...pic("hero")}
         alt="Новое пластиковое окно в квартире в Краснодаре вечером"
-        initial={{ scale: 1.18 }}
-        animate={{ scale: 1.02 }}
-        transition={{ duration: 14, ease: "easeOut" }}
-        className="absolute inset-0 w-full h-full object-cover z-0 object-[30%_center]"
+        fetchPriority="high"
+        decoding="async"
+        className="anim-hero-in absolute inset-0 w-full h-full object-cover object-[30%_center]"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-ink/75 via-ink/35 to-ink/85 z-[1]" />
-      <div className="absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_20%_60%,rgba(242,163,58,0.18),transparent_55%)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/30 to-ink/85" />
 
       {/* Navigation */}
-      <motion.nav
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="fixed top-0 left-0 right-0 z-50 px-3 md:px-8 pt-3 md:pt-5"
-      >
+      <nav className="fixed top-0 left-0 right-0 z-50 px-3 md:px-8 pt-3 md:pt-5">
         <div
           className={
-            "max-w-6xl mx-auto flex items-center justify-between p-[8px] md:p-[10px] rounded-full backdrop-blur-xl border transition-all duration-500 " +
-            (scrolled ? "bg-ink/80 border-white/10 shadow-2xl shadow-black/30" : "bg-white/5 border-white/10")
+            "wrap flex items-center justify-between h-14 md:h-16 pl-4 pr-2 rounded-full border transition-colors duration-300 " +
+            (scrolled || menu ? "bg-ink/90 border-white/10 shadow-xl shadow-black/20 backdrop-blur-md" : "bg-white/[0.06] border-white/15 backdrop-blur-md")
           }
         >
-          <a href="#top" className="flex items-center pl-3 flex-shrink-0">
+          <a href="#top" aria-label="AS·окна — на главную" onClick={() => setMenu(false)}>
             <Logo />
           </a>
 
-          <div className="hidden lg:flex items-center gap-7">
+          <div className="hidden lg:flex items-center gap-8">
             {NAV_LINKS.map((item) => (
-              <a key={item.href} href={item.href} className="text-[15px] font-medium text-white/70 hover:text-white transition-colors relative group">
+              <a key={item.href} href={item.href} className="text-[15px] font-medium text-white/75 hover:text-white transition-colors">
                 {item.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber transition-all group-hover:w-full" />
               </a>
             ))}
           </div>
 
-          <div className="flex items-center justify-end gap-2 flex-shrink-0">
-            <a href={PHONE_HREF} className="hidden md:flex items-center gap-2 text-[15px] font-semibold text-white hover:text-amber transition-colors px-3 py-2">
+          <div className="flex items-center gap-2">
+            <a href={PHONE_HREF} className="hidden md:flex items-center gap-2 text-[15px] font-semibold text-white hover:text-amber transition-colors px-3 tabular-nums">
               <Phone className="w-4 h-4" /> {PHONE}
             </a>
             <a href={PHONE_HREF} aria-label="Позвонить" className="md:hidden w-10 h-10 rounded-full bg-white/10 border border-white/15 flex items-center justify-center">
               <Phone className="w-4 h-4 text-white" />
             </a>
-            <button
-              onClick={callMaster}
-              className="hidden sm:block rounded-full px-5 py-2.5 text-[15px] font-semibold bg-amber text-ink hover:bg-amber-dark transition-all hover:scale-105 active:scale-95"
-            >
+            <button onClick={callMaster} className="hidden sm:inline-flex btn btn-sm btn-primary">
               Вызвать мастера
             </button>
-            <button onClick={() => setMenu((v) => !v)} aria-label="Меню" className="lg:hidden w-10 h-10 rounded-full bg-white text-ink flex items-center justify-center">
+            <button
+              onClick={() => setMenu((v) => !v)}
+              aria-label={menu ? "Закрыть меню" : "Открыть меню"}
+              aria-expanded={menu}
+              className="lg:hidden w-10 h-10 rounded-full bg-white text-ink flex items-center justify-center"
+            >
               {menu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
-        <AnimatePresence>
-          {menu && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="lg:hidden max-w-6xl mx-auto mt-2 rounded-[28px] bg-ink/95 backdrop-blur-xl border border-white/10 p-5"
+        {menu && (
+            <div
+              className="anim-fade-in lg:hidden wrap mt-2 rounded-3xl bg-ink/95 border border-white/10 p-3 shadow-2xl"
             >
               {NAV_LINKS.map((item) => (
-                <a key={item.href} href={item.href} onClick={() => setMenu(false)} className="block py-3 text-[18px] font-medium text-white border-b border-white/10 last:border-none">
+                <a key={item.href} href={item.href} onClick={() => setMenu(false)} className="flex items-center h-14 px-4 rounded-2xl text-[17px] font-medium text-white active:bg-white/10">
                   {item.label}
                 </a>
               ))}
-              <button
-                onClick={() => { setMenu(false); callMaster(); }}
-                className="mt-4 w-full rounded-full py-4 font-semibold bg-amber text-ink"
-              >
+              <a href={PHONE_HREF} className="flex items-center gap-2 h-14 px-4 text-[17px] font-semibold text-amber tabular-nums">
+                <Phone className="w-4 h-4" /> {PHONE}
+              </a>
+              <button onClick={() => { setMenu(false); callMaster(); }} className="btn btn-primary w-full mt-1">
                 Вызвать мастера бесплатно
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.nav>
-
-      {/* Floating glass chips (desktop) */}
-      <motion.div
-        initial={{ opacity: 0, x: -30 }}
-        animate={{ opacity: 1, x: 0, y: [0, -10, 0] }}
-        transition={{ opacity: { delay: 1.2 }, x: { delay: 1.2 }, y: { duration: 6, repeat: Infinity, ease: "easeInOut" } }}
-        className="hidden xl:flex absolute left-[4%] top-[60%] z-10 items-center gap-3 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 px-4 py-3 shadow-2xl"
-      >
-        <div className="w-10 h-10 rounded-xl bg-amber/90 flex items-center justify-center">
-          <Thermometer className="w-5 h-5 text-ink" />
-        </div>
-        <div>
-          <p className="text-[13px] font-semibold text-white">Сквозняк устранён</p>
-          <p className="text-[12px] text-white/60">+5 °C в спальне · ул. Красная</p>
-        </div>
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0, x: 30 }}
-        animate={{ opacity: 1, x: 0, y: [0, 10, 0] }}
-        transition={{ opacity: { delay: 1.4 }, x: { delay: 1.4 }, y: { duration: 7, repeat: Infinity, ease: "easeInOut" } }}
-        className="hidden xl:flex absolute right-[4%] top-[66%] z-10 items-center gap-3 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 px-4 py-3 shadow-2xl"
-      >
-        <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-          <Truck className="w-5 h-5 text-white" />
-        </div>
-        <div>
-          <p className="text-[13px] font-semibold text-white">Мастер выехал</p>
-          <p className="text-[12px] text-white/60">будет через ~40 минут</p>
-        </div>
-        <span className="relative flex h-2.5 w-2.5 ml-1">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
-        </span>
-      </motion.div>
-
-      <div id="top" className="relative flex-1 flex flex-col items-center justify-center text-center px-5 pt-[120px] md:pt-[148px] pb-10 md:pb-16 z-10">
-        <div className="flex flex-col items-center w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-[13px] text-white/90"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
-            </span>
-            Мастер свободен сегодня · Краснодар и пригороды
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-            className="font-display text-center font-semibold text-[34px] sm:text-5xl md:text-6xl lg:text-[68px] leading-[1.08] tracking-[-0.02em] text-white max-w-5xl mb-5 text-balance"
-          >
-            Окна, в которых <span className="italic font-light text-amber">тепло</span>
-            <span className="block mt-3 text-[0.62em] leading-[1.15] font-medium text-white/95">Ремонт и установка за&nbsp;1&nbsp;визит</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="text-center text-[16px] md:text-lg text-white/85 max-w-[600px] leading-relaxed mb-8 text-pretty"
-          >
-            Уберём сквозняк, отрегулируем фурнитуру, заменим стеклопакет или поставим новое окно. Цену фиксируем до начала работ — она не вырастет.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-            className="flex flex-col items-center gap-3 w-full"
-          >
-            <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-              <button
-                onClick={callMaster}
-                className="w-full sm:w-auto rounded-full px-8 py-4 text-base font-semibold bg-amber text-ink hover:bg-amber-dark transition-all hover:scale-105 active:scale-95"
-                style={{ boxShadow: "0 10px 40px 0 rgba(242, 163, 58, 0.45)" }}
-              >
-                Вызвать мастера бесплатно
-              </button>
-              <button
-                onClick={() => lead.openQuiz()}
-                className="w-full sm:w-auto rounded-full px-8 py-4 text-base font-semibold bg-white/10 backdrop-blur-lg border border-white/25 text-white hover:bg-white/20 transition-all hover:scale-105 active:scale-95"
-              >
-                Рассчитать цену за 1 минуту
               </button>
             </div>
-            <span className="text-sm text-white/60">Выезд и диагностика — 0 ₽ при заказе ремонта</span>
-          </motion.div>
+          )}
+      </nav>
 
-          {/* Trust stats instead of logos */}
-          <motion.div
-            variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.5 } } }}
-            initial="hidden"
-            animate="show"
-            className="mt-12 md:mt-[64px] w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3"
-          >
-            {STATS.map((s) => (
-              <motion.div
-                key={s.label}
-                variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
-                whileHover={{ y: -3 }}
-                className="rounded-2xl bg-white/[0.07] backdrop-blur-md border border-white/15 px-4 py-4 md:py-5 text-left"
-              >
-                <p className="font-display text-[22px] md:text-[28px] text-white leading-none">{s.value}</p>
-                <p className="text-[12px] md:text-[13px] text-white/60 mt-2 leading-snug">{s.label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-            className="mt-5 flex items-center gap-2 text-[13px] text-white/70"
-          >
-            <span className="flex">
-              {[0, 1, 2, 3, 4].map((i) => (
-                <Star key={i} className="w-4 h-4 fill-amber text-amber" />
-              ))}
-            </span>
-            4,9 — средняя оценка клиентов на Яндекс Картах
-          </motion.div>
+      {/* Floating status chips (large desktop only) */}
+      <div className="hidden xl:flex absolute left-[4%] top-[58%] z-10 anim-fade-up" style={delay(1)}>
+        <div className="anim-float flex items-center gap-3 rounded-2xl bg-ink/60 border border-white/15 px-4 py-3 shadow-2xl">
+          <div className="w-10 h-10 rounded-xl bg-amber flex items-center justify-center">
+            <Thermometer className="w-5 h-5 text-ink" />
+          </div>
+          <div>
+            <p className="text-[13px] font-semibold text-white">Сквозняк устранён</p>
+            <p className="text-[12px] text-white/65">+5 °C в спальне · ул. Красная</p>
+          </div>
         </div>
+      </div>
+      <div className="hidden xl:flex absolute right-[4%] top-[66%] z-10 anim-fade-up" style={delay(1.2)}>
+        <div className="anim-float flex items-center gap-3 rounded-2xl bg-ink/60 border border-white/15 px-4 py-3 shadow-2xl" style={{ animationDelay: "-3s" }}>
+          <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center">
+            <Truck className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <p className="text-[13px] font-semibold text-white">Мастер выехал</p>
+            <p className="text-[12px] text-white/65">будет через ~40 минут</p>
+          </div>
+          <LiveDot />
+        </div>
+      </div>
+
+      <div id="top" className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-5 pt-28 md:pt-36 pb-10 md:pb-14">
+        <div className="anim-fade-up inline-flex items-center gap-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-[13px] text-white/90">
+          <LiveDot />
+          Мастер свободен сегодня<span className="hidden sm:inline"> · Краснодар и пригороды</span>
+        </div>
+
+        <h1 className="t-h1 text-white max-w-[15ch] md:max-w-none mt-6">
+          Окна, в&nbsp;которых <span className="text-amber">тепло</span>
+        </h1>
+        <p className="mt-3 md:mt-4 font-display font-medium text-white/90 text-[22px] md:text-[34px] leading-tight tracking-[-0.02em]">
+          Ремонт и установка за&nbsp;1&nbsp;визит
+        </p>
+
+        <p className="t-lead text-white/75 max-w-[560px] mt-5 md:mt-6">
+          Уберём сквозняк, отрегулируем фурнитуру, заменим стеклопакет или поставим новое окно. Цену фиксируем до начала работ.
+        </p>
+
+        <div className="mt-8 w-full sm:w-auto flex flex-col sm:flex-row gap-3 anim-fade-up" style={delay(0.1)}>
+          <button onClick={callMaster} className="btn btn-primary w-full sm:w-auto">
+            Вызвать мастера бесплатно
+          </button>
+          <button onClick={() => lead.openQuiz()} className="btn btn-glass w-full sm:w-auto">
+            Рассчитать цену за 1 минуту
+          </button>
+        </div>
+        <p className="mt-3 text-[13px] text-white/60 anim-fade-up" style={delay(0.14)}>
+          Выезд и диагностика — 0 ₽ при заказе ремонта
+        </p>
+
+        <ul className="mt-12 md:mt-16 w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 anim-fade-up" style={delay(0.2)}>
+          {STATS.map((s) => (
+            <li key={s.label} className="rounded-2xl bg-white/[0.07] backdrop-blur-md border border-white/15 px-4 py-4 md:px-5 md:py-5 text-left">
+              <p className="font-display font-semibold text-[22px] md:text-[28px] text-white leading-none tracking-[-0.02em] tabular-nums">{s.value}</p>
+              <p className="text-[12px] md:text-[13px] text-white/65 mt-2 leading-snug">{s.label}</p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[13px] text-white/70 anim-fade-up" style={delay(0.26)}>
+          <span className="flex" aria-hidden>
+            {[0, 1, 2, 3, 4].map((i) => (
+              <Star key={i} className="w-4 h-4 fill-amber text-amber" />
+            ))}
+          </span>
+          4,9 — средняя оценка клиентов на Яндекс Картах
+        </p>
       </div>
     </section>
   );

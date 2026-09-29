@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Plus, X, Wrench, Frame, Wallet } from "lucide-react";
+import { Plus, Wrench, Frame, Wallet, ArrowRight } from "lucide-react";
 import { useLead } from "@/components/lead/LeadProvider";
+import Reveal, { SectionHead } from "@/components/ui/Reveal";
 
 interface FAQItem {
   question: string;
@@ -43,21 +43,20 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="bg-white py-20 md:py-[100px] px-5 md:px-[80px]">
-      <div className="max-w-[800px] mx-auto">
-        <div className="text-center mb-10">
-          <h2 className="font-display text-[30px] md:text-[48px] font-semibold text-ink leading-tight mb-3">Отвечаем честно</h2>
-          <p className="text-[16px] text-muted">Самые частые вопросы наших клиентов</p>
-        </div>
+    <section id="faq" className="section bg-white">
+      <div className="max-w-[820px] mx-auto">
+        <SectionHead center eyebrow="Вопросы и ответы" title="Отвечаем честно" lead="Самые частые вопросы наших клиентов" />
 
-        <div className="flex justify-start md:justify-center gap-1 border-b border-line mb-6 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+        <div className="no-scrollbar flex md:justify-center gap-1 border-b border-line mb-2 overflow-x-auto -mx-5 px-5 md:mx-0 md:px-0" role="tablist">
           {tabs.map((tab) => (
             <button
               key={tab.id}
+              role="tab"
+              aria-selected={activeTab === tab.id}
               onClick={() => { setActiveTab(tab.id); setOpenIndex(0); }}
               className={
-                "inline-flex items-center gap-2 px-4 md:px-5 py-3 text-[15px] transition-all border-b-2 whitespace-nowrap " +
-                (activeTab === tab.id ? "text-amber-dark font-semibold border-amber" : "text-muted font-medium border-transparent")
+                "inline-flex items-center gap-2 px-4 md:px-5 h-12 text-[15px] border-b-2 -mb-px whitespace-nowrap transition-colors " +
+                (activeTab === tab.id ? "text-ink font-semibold border-amber" : "text-muted font-medium border-transparent hover:text-ink")
               }
             >
               <tab.icon className="w-4 h-4" />
@@ -67,46 +66,47 @@ export default function FAQ() {
         </div>
 
         <div>
-          {faqData[activeTab].map((item, index) => (
-            <div key={activeTab + index} className="border-b border-line py-5">
-              <button onClick={() => setOpenIndex(openIndex === index ? null : index)} className="w-full flex justify-between items-center gap-4 text-left">
-                <span className="text-[16px] font-semibold text-ink">{item.question}</span>
-                <span className={"w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors " + (openIndex === index ? "bg-amber text-ink" : "bg-cream text-muted")}>
-                  {openIndex === index ? <X size={16} strokeWidth={2} /> : <Plus size={16} strokeWidth={2} />}
-                </span>
-              </button>
-              <AnimatePresence initial={false}>
-                {openIndex === index && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="overflow-hidden"
+          {faqData[activeTab].map((item, index) => {
+            const open = openIndex === index;
+            return (
+              <div key={activeTab + index} className="border-b border-line">
+                <button
+                  onClick={() => setOpenIndex(open ? null : index)}
+                  aria-expanded={open}
+                  className="w-full flex justify-between items-center gap-4 text-left py-5"
+                >
+                  <span className="text-[16px] font-semibold text-ink">{item.question}</span>
+                  <span
+                    className={"w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-[transform,background-color] duration-300 " + (open ? "bg-amber text-ink rotate-45" : "bg-cream text-ink")}
                   >
-                    <div className="pt-3 pb-1 text-[15px] text-ink/70 leading-[1.7] pr-10">{item.answer}</div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
+                    <Plus size={16} strokeWidth={2} />
+                  </span>
+                </button>
+                <div className="accordion" data-open={open} aria-hidden={!open}>
+                  <div>
+                    <p className="t-body text-ink/70 pb-5 pr-12">{item.answer}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
-        <div className="mt-12 bg-cream rounded-[20px] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center">
-            <div className="flex -space-x-3">
+        <Reveal className="mt-12 bg-cream rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center self-start md:self-auto">
+            <div className="flex -space-x-3" aria-hidden>
               {["А", "М", "С"].map((l, i) => (
                 <div
                   key={l}
-                  className="w-11 h-11 rounded-full border-2 border-cream flex items-center justify-center font-display font-semibold text-white"
-                  style={{ background: ["#12324A", "#2F6F9A", "#D9861A"][i], zIndex: 3 - i }}
+                  className="w-11 h-11 rounded-full border-2 border-cream flex items-center justify-center font-semibold text-white"
+                  style={{ background: ["#12324A", "#2C6A94", "#95580C"][i], zIndex: 3 - i }}
                 >
                   {l}
                 </div>
               ))}
             </div>
             <div className="ml-4">
-              <p className="font-semibold text-[15px] text-ink">Остались вопросы?</p>
+              <p className="font-semibold text-[16px] text-ink">Остались вопросы?</p>
               <p className="text-[14px] text-muted">Мастер ответит бесплатно</p>
             </div>
           </div>
@@ -123,15 +123,11 @@ export default function FAQ() {
                 cta: "Задать вопрос",
               })
             }
-            className="w-full md:w-auto bg-ink text-white rounded-[16px] px-6 py-4 text-[15px] font-semibold hover:bg-deep transition-all flex items-center justify-center gap-3 group"
+            className="btn btn-dark w-full md:w-auto"
           >
-            Задать вопрос
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1">
-              <path d="M7 7v6a2 2 0 0 0 2 2h9" />
-              <path d="m15 11 4 4-4 4" />
-            </svg>
+            Задать вопрос <ArrowRight className="w-4 h-4" />
           </button>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

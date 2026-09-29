@@ -1,7 +1,8 @@
 "use client";
-import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import { useLead, type Article } from "@/components/lead/LeadProvider";
-import { img } from "@/lib/site";
+import Reveal, { SectionHead } from "@/components/ui/Reveal";
+import { pic } from "@/lib/site";
 
 const posts: (Article & { description: string; tag: string })[] = [
   {
@@ -27,7 +28,7 @@ const posts: (Article & { description: string; tag: string })[] = [
       "Переведите фурнитуру в зимний режим. На торце створки есть эксцентрики (цапфы) — их поворот усиливает прижим. Мастер сделает это для всех окон за полчаса.",
       "Проверьте уплотнитель. Если резинка затвердела, потрескалась или почернела — её пора менять. Это главный источник сквозняков.",
       "Смажьте фурнитуру. Сухой механизм изнашивается быстрее и может заклинить в холод.",
-      "Проверьте швы и отливы. Влажный ветер с Кубани находит любую щель: герметизация швов защищает от продуваний и плесени на откосах.",
+      "Проверьте швы и отливы. Влажный ветер находит любую щель: герметизация швов защищает от продуваний и плесени на откосах.",
       "Комплексная подготовка всех окон квартиры обычно занимает 2–4 часа и заметно снижает счёт за отопление.",
     ],
   },
@@ -40,7 +41,7 @@ const posts: (Article & { description: string; tag: string })[] = [
       "Обычная рамочная сетка — самый доступный вариант: защищает от комаров и мошек, снимается на зиму.",
       "Плиссе — складная сетка для дверей и больших проёмов: не мешает проходу и не требует снятия.",
       "«Антикошка» — сетка из прочного полимера на усиленной раме с металлическими креплениями. Выдерживает когти и вес кошки, служит годами.",
-      "Если в доме есть питомец — переплата оправдана: обычную сетку кот порвёт за сезон, а падение из окна — главная причина травм у домашних кошек.",
+      "Если в доме есть питомец — переплата оправдана: обычную сетку кот порвёт за сезон, а падение из окна — частая причина травм у домашних кошек.",
     ],
   },
 ];
@@ -48,48 +49,55 @@ const posts: (Article & { description: string; tag: string })[] = [
 export default function Blog() {
   const lead = useLead();
   return (
-    <section className="bg-cream py-20 md:py-24 px-5 md:px-20">
-      <div className="max-w-[1200px] mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-10">
-          <h2 className="font-display font-semibold text-[28px] md:text-[44px] text-ink leading-[1.15] max-w-2xl">
-            Полезно знать <span className="italic font-light text-glass">о своих окнах</span>
-          </h2>
-          <button
-            onClick={() =>
-              lead.openForm({
-                source: "Блог: бесплатная консультация",
-                title: "Бесплатная консультация мастера",
-                subtitle: "Расскажите, что с окном, — подскажем, можно ли обойтись без ремонта.",
-                image: "repair",
-                withComment: true,
-                withTime: false,
-                cta: "Получить консультацию",
-              })
-            }
-            className="bg-ink text-white rounded-[14px] px-6 py-3 text-[15px] font-semibold flex items-center gap-2 hover:bg-deep transition-colors"
-          >
-            Бесплатная консультация <span className="text-[14px] leading-none">↳</span>
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-          {posts.map((post) => (
-            <motion.button
-              key={post.title}
-              whileHover={{ y: -3 }}
-              onClick={() => lead.openArticle(post)}
-              className="text-left bg-white border border-line rounded-[18px] p-5 flex flex-col transition-all duration-200 hover:shadow-[0_8px_32px_rgba(11,22,32,0.08)] group"
+    <section className="section bg-cream">
+      <div className="wrap">
+        <SectionHead
+          eyebrow="Полезно знать"
+          title={<>Коротко <span className="text-glass">о ваших окнах</span></>}
+          action={
+            <button
+              onClick={() =>
+                lead.openForm({
+                  source: "Блог: бесплатная консультация",
+                  title: "Бесплатная консультация мастера",
+                  subtitle: "Расскажите, что с окном, — подскажем, можно ли обойтись без ремонта.",
+                  image: "repair",
+                  withComment: true,
+                  withTime: false,
+                  cta: "Получить консультацию",
+                })
+              }
+              className="btn btn-dark w-full md:w-auto"
             >
-              <div className="w-full h-[220px] rounded-[12px] overflow-hidden mb-5 relative">
-                <img src={img(post.image)} alt={post.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                <span className="absolute top-3 left-3 rounded-full bg-white/90 backdrop-blur px-3 py-1 text-[12px] font-semibold text-ink">{post.tag}</span>
-              </div>
-              <h3 className="font-bold text-[17px] text-ink leading-[1.4] mb-2.5">{post.title}</h3>
-              <p className="text-[14px] text-muted leading-[1.6] mb-5 line-clamp-3">{post.description}</p>
-              <span className="mt-auto text-[14px] font-semibold text-ink inline-flex items-center gap-1.5 group-hover:text-amber-dark transition-colors">
-                Читать за 2 минуты <span className="text-[16px] leading-none">↳</span>
-              </span>
-            </motion.button>
+              Бесплатная консультация
+            </button>
+          }
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {posts.map((post, i) => (
+            <Reveal key={post.title} delay={i * 0.08} className="h-full">
+              <button
+                onClick={() => lead.openArticle(post)}
+                className="group h-full w-full text-left bg-white border border-line rounded-3xl p-4 md:p-5 flex flex-col transition-shadow duration-300 hover:shadow-[0_20px_50px_-20px_rgba(11,22,32,0.18)]"
+              >
+                <div className="w-full aspect-[16/10] rounded-2xl overflow-hidden mb-5 relative">
+                  <img
+                    {...pic(post.image, "(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw")}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <span className="absolute top-3 left-3 rounded-full bg-white px-3 py-1 text-[12px] font-semibold text-ink">{post.tag}</span>
+                </div>
+                <h3 className="text-[18px] font-semibold text-ink leading-snug tracking-[-0.01em] px-1">{post.title}</h3>
+                <p className="t-body text-muted mt-2 mb-5 line-clamp-3 px-1">{post.description}</p>
+                <span className="mt-auto px-1 text-[14px] font-semibold text-glass inline-flex items-center gap-1.5">
+                  Читать за 2 минуты <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </span>
+              </button>
+            </Reveal>
           ))}
         </div>
       </div>

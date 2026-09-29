@@ -3,32 +3,359 @@
 @theme inline {
   --color-ink: #0b1620;
   --color-deep: #12324a;
-  --color-glass: #2f6f9a;
+  --color-glass: #2c6a94; /* 5.6:1 on white — accent for light backgrounds */
   --color-frost: #e6eff4;
-  --color-cream: #f7f3ec;
-  --color-amber: #f2a33a;
-  --color-amber-dark: #d9861a;
-  --color-muted: #66737e;
-  --color-line: #e6e0d6;
+  --color-cream: #f6f3ee;
+  --color-amber: #f2a33a; /* accent for dark backgrounds & buttons only */
+  --color-amber-dark: #e08e22;
+  --color-amber-ink: #95580c; /* 5.2:1 on white — amber-toned small text on light */
+  --color-muted: #5d6a75; /* 5.4:1 on cream */
+  --color-line: #e4ded4;
 
-  --font-sans: var(--font-manrope), system-ui, sans-serif;
-  --font-display: var(--font-unbounded), var(--font-manrope), sans-serif;
+  --font-sans: var(--font-onest), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-onest), system-ui, sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html {
-  scroll-padding-top: 90px;
+  scroll-padding-top: 96px;
+  scrollbar-gutter: stable;
 }
 
 body {
-  background: #f7f3ec;
+  background: #f6f3ee;
   color: #0b1620;
-  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
 }
 
 ::selection {
   background: #f2a33a;
   color: #0b1620;
+}
+
+:focus-visible {
+  outline: 2px solid #2c6a94;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ───────── Typography scale ───────── */
+@layer components {
+  .t-h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(38px, 6.2vw, 78px);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+  .t-h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(30px, 4.2vw, 52px);
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+  .t-h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(20px, 1.8vw, 24px);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  .t-lead {
+    font-size: clamp(16px, 1.25vw, 18px);
+    line-height: 1.6;
+  }
+  .t-body {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .t-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .t-eyebrow::before {
+    content: "";
+    width: 20px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+  }
+
+  /* ───────── Layout ───────── */
+  .section {
+    padding: clamp(72px, 9vw, 128px) 20px;
+  }
+  @media (min-width: 768px) {
+    .section {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+  }
+  .wrap {
+    max-width: 1240px;
+    margin-inline: auto;
+  }
+
+  /* ───────── Buttons ───────── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 56px;
+    padding: 12px 28px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.2;
+    text-align: center;
+    letter-spacing: -0.01em;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.15s ease;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  .btn-sm {
+    min-height: 44px;
+    padding: 8px 20px;
+    white-space: nowrap;
+    font-size: 15px;
+  }
+  .btn-primary {
+    background: #f2a33a;
+    color: #0b1620;
+    box-shadow: 0 10px 30px -10px rgba(242, 163, 58, 0.7);
+  }
+  .btn-primary:hover {
+    background: #e08e22;
+  }
+  .btn-dark {
+    background: #0b1620;
+    color: #fff;
+  }
+  .btn-dark:hover {
+    background: #12324a;
+  }
+  .btn-light {
+    background: #fff;
+    color: #0b1620;
+    border: 1px solid #e4ded4;
+  }
+  .btn-light:hover {
+    border-color: #0b1620;
+  }
+  .btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  .btn-glass:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+}
+
+/* ───────── Motion (CSS, compositor-only) ───────── */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes hero-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -8px, 0);
+  }
+}
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@keyframes shimmer {
+  from {
+    transform: translate3d(-120%, 0, 0) skewX(-12deg);
+  }
+  to {
+    transform: translate3d(320%, 0, 0) skewX(-12deg);
+  }
+}
+@keyframes ripple {
+  0% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+@keyframes bar {
+  0%,
+  100% {
+    transform: scaleY(0.55);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* Scroll reveal: hidden only when JS is running (html.js is set before first paint) */
+.js .reveal {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 0.7s var(--ease-out-soft),
+    transform 0.7s var(--ease-out-soft);
+}
+.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translate3d(14px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.anim-fade-in {
+  animation: fade-in 0.3s var(--ease-out-soft) both;
+}
+.anim-slide-in {
+  animation: slide-in 0.25s var(--ease-out-soft) both;
+}
+.anim-pop {
+  animation: pop 0.45s var(--ease-out-soft) both;
+}
+
+/* FAQ accordion: animates height via grid rows (no JS measuring) */
+.accordion {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s var(--ease-out-soft);
+}
+.accordion[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+.accordion > div {
+  overflow: hidden;
+}
+
+/* Modal */
+.modal-overlay {
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+.modal-overlay[data-open="true"] {
+  opacity: 1;
+}
+.modal-panel {
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  transition:
+    opacity 0.28s var(--ease-out-soft),
+    transform 0.28s var(--ease-out-soft);
+}
+.modal-overlay[data-open="true"] .modal-panel {
+  opacity: 1;
+  transform: none;
+}
+
+.anim-fade-up {
+  animation: fade-up 0.8s var(--ease-out-soft) both;
+}
+.anim-hero-in {
+  animation: hero-in 0.6s ease-out both;
+}
+.anim-float {
+  animation: float-y 6s ease-in-out infinite;
+}
+.anim-marquee {
+  animation: marquee 60s linear infinite;
+}
+.anim-marquee:hover {
+  animation-play-state: paused;
+}
+.anim-shimmer {
+  animation: shimmer 2.8s linear infinite;
+}
+.anim-ripple {
+  animation: ripple 4s ease-out infinite;
+}
+.anim-bar {
+  transform-origin: bottom;
+  animation: bar 2.2s ease-in-out infinite;
 }
 
 /* Quiz range slider */
@@ -39,11 +366,12 @@ body {
   border-radius: 999px;
   background: rgba(127, 140, 150, 0.35);
   outline: none;
+  touch-action: pan-y;
 }
 .quiz-range::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: #f2a33a;
   border: 4px solid #fff;
@@ -51,12 +379,19 @@ body {
   cursor: pointer;
 }
 .quiz-range::-moz-range-thumb {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: #f2a33a;
   border: 4px solid #fff;
   cursor: pointer;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -64,6 +399,8 @@ body {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
