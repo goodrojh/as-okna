@@ -21,9 +21,15 @@
 html {
   scroll-padding-top: 96px;
   scrollbar-gutter: stable;
+  overscroll-behavior-x: none;
 }
 
 body {
+  /* Second line of defence against sideways panning (propagates to the viewport, keeps position: sticky working);
+     main additionally uses overflow-x: clip */
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+  max-width: 100%;
   background: #f6f3ee;
   color: #0b1620;
   font-family: var(--font-sans);
@@ -76,22 +82,6 @@ body {
   .t-body {
     font-size: 15px;
     line-height: 1.6;
-  }
-  .t-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-  .t-eyebrow::before {
-    content: "";
-    width: 20px;
-    height: 2px;
-    border-radius: 2px;
-    background: currentColor;
   }
 
   /* ───────── Layout ───────── */
@@ -269,7 +259,7 @@ body {
 @keyframes slide-in {
   from {
     opacity: 0;
-    transform: translate3d(14px, 0, 0);
+    transform: translate3d(0, 6px, 0);
   }
   to {
     opacity: 1;

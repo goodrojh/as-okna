@@ -98,7 +98,7 @@ export default function HowItWorks() {
   return (
     <section id="how" className="section bg-white">
       <div className="wrap">
-        <SectionHead center eyebrow="Как мы работаем" title={<>Тёплый дом <span className="text-glass">за 3 простых шага</span></>} />
+        <SectionHead center title={<>Тёплый дом <span className="text-glass">за 3 простых шага</span></>} />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-6 lg:gap-8">
           {STEPS.map(({ n, image, alt, title, text, Visual }, i) => (

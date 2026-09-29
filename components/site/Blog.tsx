@@ -52,7 +52,6 @@ export default function Blog() {
     <section className="section bg-cream">
       <div className="wrap">
         <SectionHead
-          eyebrow="Полезно знать"
           title={<>Коротко <span className="text-glass">о ваших окнах</span></>}
           action={
             <button

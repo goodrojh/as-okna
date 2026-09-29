@@ -112,7 +112,7 @@ export default function LeadProvider({ children }: { children: React.ReactNode }
             aria-modal="true"
             aria-label={state.kind === "form" ? state.config.title : state.kind === "quiz" ? "Калькулятор стоимости" : state.article.title}
             onClick={(e) => e.stopPropagation()}
-            className="modal-panel relative w-full md:max-w-[960px] max-h-[92dvh] overflow-y-auto overscroll-contain bg-cream rounded-t-3xl md:rounded-3xl shadow-2xl grid md:grid-cols-[0.9fr_1.1fr] outline-none"
+            className="modal-panel relative w-full md:max-w-[960px] max-h-[92dvh] overflow-y-auto overflow-x-hidden overscroll-contain bg-cream rounded-t-3xl md:rounded-3xl shadow-2xl grid md:grid-cols-[0.9fr_1.1fr] outline-none"
           >
             {/* Close button stays visible while the sheet scrolls */}
             <div className="sticky top-0 z-20 h-0 col-span-full">
@@ -177,8 +177,7 @@ function ArticleView({ article, onCta }: { article: Article; onCta: () => void }
   return (
     <article>
       <img {...pic(article.image, "100vw")} alt="" decoding="async" className="md:hidden w-full aspect-[16/9] object-cover rounded-2xl mb-5" />
-      <span className="t-eyebrow text-glass">Полезно знать</span>
-      <h3 className="t-h3 md:text-[28px] text-ink mt-3 mb-5 pr-12 text-balance">{article.title}</h3>
+      <h3 className="t-h3 md:text-[28px] text-ink mb-5 pr-12 text-balance">{article.title}</h3>
       <div className="space-y-4 t-body text-ink/75">
         {article.body.map((p, i) => (
           <p key={i}>{p}</p>

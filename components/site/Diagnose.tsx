@@ -77,7 +77,6 @@ export default function Diagnose() {
     <section id="diagnose" className="section bg-cream">
       <div className="wrap">
         <SectionHead
-          eyebrow="Диагностика за 10 секунд"
           title="Что случилось с вашим окном?"
           lead="Выберите симптом — покажем причину, решение и честную цену ещё до звонка."
         />

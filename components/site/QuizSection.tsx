@@ -13,8 +13,7 @@ export default function QuizSection() {
         <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/90 to-ink/60" />
         <div className="relative wrap grid lg:grid-cols-2 gap-10 lg:gap-16 px-5 md:px-12 py-14 md:py-20 items-center">
           <Reveal>
-            <span className="t-eyebrow text-amber">Калькулятор</span>
-            <h2 className="t-h2 text-white mt-4">
+            <h2 className="t-h2 text-white">
               Узнайте цену <span className="text-amber">за 1 минуту</span>
             </h2>
             <p className="t-lead text-white/70 mt-5 max-w-[460px]">

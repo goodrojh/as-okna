@@ -40,14 +40,12 @@ export default function Reveal({
 }
 
 export function SectionHead({
-  eyebrow,
   title,
   lead,
   dark = false,
   center = false,
   action,
 }: {
-  eyebrow: string;
   title: React.ReactNode;
   lead?: React.ReactNode;
   dark?: boolean;
@@ -57,8 +55,7 @@ export function SectionHead({
   return (
     <div className={"mb-10 md:mb-14 flex flex-col gap-6 " + (center ? "items-center text-center" : "md:flex-row md:items-end md:justify-between")}>
       <Reveal className={center ? "max-w-3xl flex flex-col items-center" : "max-w-3xl"}>
-        <span className={"t-eyebrow " + (dark ? "text-amber" : "text-glass")}>{eyebrow}</span>
-        <h2 className={"t-h2 mt-4 " + (dark ? "text-white" : "text-ink")}>{title}</h2>
+        <h2 className={"t-h2 " + (dark ? "text-white" : "text-ink")}>{title}</h2>
         {lead && <p className={"t-lead mt-4 max-w-2xl " + (dark ? "text-white/70" : "text-muted")}>{lead}</p>}
       </Reveal>
       {action && (

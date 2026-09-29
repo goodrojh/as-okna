@@ -45,9 +45,9 @@ export default function FAQ() {
   return (
     <section id="faq" className="section bg-white">
       <div className="max-w-[820px] mx-auto">
-        <SectionHead center eyebrow="Вопросы и ответы" title="Отвечаем честно" lead="Самые частые вопросы наших клиентов" />
+        <SectionHead center title="Отвечаем честно" lead="Самые частые вопросы наших клиентов" />
 
-        <div className="no-scrollbar flex md:justify-center gap-1 border-b border-line mb-2 overflow-x-auto -mx-5 px-5 md:mx-0 md:px-0" role="tablist">
+        <div className="no-scrollbar flex md:justify-center gap-1 border-b border-line mb-2 overflow-x-auto overscroll-x-contain -mx-5 px-5 md:mx-0 md:px-0" role="tablist">
           {tabs.map((tab) => (
             <button
               key={tab.id}

@@ -26,7 +26,6 @@ export default function Features() {
       <div className="wrap">
         <SectionHead
           center
-          eyebrow="Почему мы"
           title={<>Почему в Краснодаре звонят в <span className="text-glass">AS·окна</span></>}
           lead="Мы не продаём окна любой ценой. Сначала пробуем починить — это в разы дешевле, а результат тот же: тихо, тепло и без сквозняков."
         />

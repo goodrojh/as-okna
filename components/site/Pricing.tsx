@@ -43,7 +43,6 @@ export default function Pricing() {
       <div className="wrap">
         <SectionHead
           center
-          eyebrow="Пакеты"
           title={<>Готовые пакеты. <span className="text-glass">Понятные цены.</span></>}
           lead="Выберите, что нужно вашему окну. Не уверены — мастер подскажет бесплатно."
         />

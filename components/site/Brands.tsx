@@ -44,7 +44,6 @@ export default function Brands() {
     <section className="section bg-white overflow-hidden">
       <div className="wrap">
         <SectionHead
-          eyebrow="Любые марки"
           title="Чиним окна любых профилей"
           lead="Фурнитура и уплотнители для популярных систем — всегда в машине мастера."
           action={

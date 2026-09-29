@@ -31,7 +31,6 @@ export default function Reviews() {
       <div className="wrap">
         <SectionHead
           dark
-          eyebrow="Отзывы"
           title={<>Нам доверяют <span className="text-amber">соседи по Краснодару</span></>}
           action={
             <div className="flex items-center gap-4 rounded-2xl bg-white/5 border border-white/10 px-5 py-4 w-fit">
@@ -44,7 +43,7 @@ export default function Reviews() {
           }
         />
 
-        <div className="no-scrollbar flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto snap-x snap-mandatory -mx-5 px-5 md:mx-0 md:px-0 scroll-px-5">
+        <div className="no-scrollbar flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto overscroll-x-contain snap-x snap-mandatory -mx-5 px-5 md:mx-0 md:px-0 scroll-px-5">
           {REVIEWS.map((r, i) => (
             <Reveal
               key={r.name}

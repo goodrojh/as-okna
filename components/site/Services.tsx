@@ -44,7 +44,6 @@ export default function Services() {
     <section id="services" className="section bg-cream">
       <div className="wrap">
         <SectionHead
-          eyebrow="Услуги и цены"
           title={<>Честный прайс. <span className="text-glass">Без звёздочек.</span></>}
           lead="Цены на сайте — реальные. Итоговую стоимость мастер назовёт на месте до начала работ и зафиксирует в смете."
         />
