@@ -3,7 +3,9 @@
  * The script writes every lead to the Google Sheet and emails it.
  * Can also be overridden at build time with NEXT_PUBLIC_LEAD_ENDPOINT.
  */
-export const LEAD_ENDPOINT = process.env.NEXT_PUBLIC_LEAD_ENDPOINT || "";
+export const LEAD_ENDPOINT =
+  process.env.NEXT_PUBLIC_LEAD_ENDPOINT ||
+  "https://script.google.com/macros/s/AKfycbx34CxudVVbWn4RkuI7KkZ4DrSBrh_uyHheW1jWUpqJ76oTmozPBjdQ5bfqyIuNvfOy/exec";
 
 export interface LeadPayload {
   source: string;
