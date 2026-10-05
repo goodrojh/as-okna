@@ -1,3 +1,10 @@
+/**
+ * Google Apps Script web-app URL (see integrations/google-apps-script.gs).
+ * The script writes every lead to the Google Sheet, emails it and sends it to WhatsApp.
+ * Can also be overridden at build time with NEXT_PUBLIC_LEAD_ENDPOINT.
+ */
+export const LEAD_ENDPOINT = process.env.NEXT_PUBLIC_LEAD_ENDPOINT || "";
+
 export interface LeadPayload {
   source: string;
   phone: string;
@@ -6,26 +13,29 @@ export interface LeadPayload {
   details?: Record<string, string | number>;
 }
 
-/**
- * Отправка заявки.
- * Чтобы заявки приходили вам (Telegram-бот, почта, CRM), задайте переменную
- * NEXT_PUBLIC_LEAD_ENDPOINT — URL, который принимает POST с JSON.
- * Без неё форма работает в демо-режиме (заявка только выводится в консоль).
- */
+const loadedAt = typeof performance !== "undefined" ? performance.now() : 0;
+
 export async function submitLead(payload: LeadPayload): Promise<void> {
-  const endpoint = process.env.NEXT_PUBLIC_LEAD_ENDPOINT;
-  const body = { ...payload, page: typeof window !== "undefined" ? window.location.href : "", at: new Date().toISOString() };
-  if (!endpoint) {
+  const body = {
+    ...payload,
+    page: typeof window !== "undefined" ? window.location.href : "",
+    at: new Date().toISOString(),
+    // time on page in ms — the script rejects instant (bot) submissions
+    t: Math.round((typeof performance !== "undefined" ? performance.now() : 0) - loadedAt),
+  };
+  if (!LEAD_ENDPOINT) {
     console.info("[lead:demo]", body);
     await new Promise((r) => setTimeout(r, 700));
     return;
   }
-  const res = await fetch(endpoint, {
+  // text/plain + no-cors = "simple" request: Apps Script accepts it without a CORS preflight.
+  await fetch(LEAD_ENDPOINT, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify(body),
+    keepalive: true,
   });
-  if (!res.ok) throw new Error("lead failed");
 }
 
 export function formatPhone(raw: string): string {

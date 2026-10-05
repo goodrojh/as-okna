@@ -2,7 +2,7 @@
 import React, { useId, useState } from "react";
 import { Check, Loader2, Phone } from "lucide-react";
 import { formatPhone, isPhoneValid, submitLead } from "@/lib/lead";
-import { PHONE, PHONE_HREF } from "@/lib/site";
+import { CONTACTS } from "@/lib/site";
 
 export interface LeadFormConfig {
   source: string;
@@ -102,11 +102,18 @@ export default function LeadForm({ config }: { config: LeadFormConfig }) {
       <button type="submit" disabled={status === "sending"} className="btn btn-primary mt-7 w-full disabled:opacity-70">
         {status === "sending" ? <Loader2 className="w-5 h-5 animate-spin" /> : config.cta || "Жду звонка мастера"}
       </button>
-      {status === "error" && <p className="text-[13px] text-red-600 mt-2 text-center">Не получилось отправить. Позвоните нам: {PHONE}</p>}
+      {status === "error" && <p className="text-[13px] text-red-600 mt-2 text-center">Не получилось отправить. Позвоните нам: {CONTACTS[0].phone}</p>}
       <p className="mt-4 text-[12px] text-ink/50 leading-relaxed text-center">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных. Не звоним с рекламой.</p>
-      <a href={PHONE_HREF} className="mt-4 flex items-center justify-center gap-2 h-11 text-[15px] font-semibold text-ink hover:text-glass transition-colors tabular-nums">
-        <Phone className="w-4 h-4" /> Или позвоните: {PHONE}
-      </a>
+      <div className="mt-4 text-center">
+        <p className="text-[13px] text-muted">Или позвоните сами:</p>
+        <div className="mt-1 flex flex-wrap justify-center gap-x-5">
+          {CONTACTS.map((c) => (
+            <a key={c.href} href={c.href} className="inline-flex items-center gap-1.5 h-10 text-[15px] font-semibold text-ink hover:text-glass transition-colors tabular-nums">
+              <Phone className="w-4 h-4" /> <span className="font-normal text-muted">{c.name}</span> {c.phone}
+            </a>
+          ))}
+        </div>
+      </div>
     </form>
   );
 }
@@ -119,9 +126,14 @@ export function LeadSuccess() {
       </div>
       <h3 className="t-h3 md:text-[28px] text-ink mt-7">Заявка принята!</h3>
       <p className="t-body mt-3 text-muted max-w-[340px]">Мастер перезвонит в течение 5 минут, уточнит детали и согласует удобное время выезда.</p>
-      <a href={PHONE_HREF} className="btn btn-light mt-8 tabular-nums">
-        <Phone className="w-4 h-4" /> Не хотите ждать? {PHONE}
-      </a>
+      <p className="mt-8 text-[14px] text-muted">Не хотите ждать? Позвоните:</p>
+      <div className="mt-3 flex flex-col sm:flex-row gap-2">
+        {CONTACTS.map((c) => (
+          <a key={c.href} href={c.href} className="btn btn-light tabular-nums">
+            <Phone className="w-4 h-4" /> {c.name} · {c.phone}
+          </a>
+        ))}
+      </div>
     </div>
   );
 }

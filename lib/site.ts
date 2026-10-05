@@ -1,5 +1,11 @@
-export const PHONE = "+7 961 440-00-14";
-export const PHONE_HREF = "tel:+79614400014";
+/** Two contact people. Георгий is the master (also on WhatsApp). */
+export const CONTACTS = [
+  { name: "Георгий", phone: "+7 961 440-00-14", href: "tel:+79614400014" },
+  { name: "Владимир", phone: "+7 962 876-14-00", href: "tel:+79628761400" },
+] as const;
+
+export const PHONE = CONTACTS[0].phone;
+export const PHONE_HREF = CONTACTS[0].href;
 
 /** Number used for WhatsApp (same as the main phone). */
 export const MESSENGER_PHONE = "79614400014";

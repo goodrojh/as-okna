@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Phone, Wrench } from "lucide-react";
 import { useLead } from "@/components/lead/LeadProvider";
-import { MESSENGERS, PHONE_HREF, asset } from "@/lib/site";
+import { MESSENGERS, asset } from "@/lib/site";
 
 export default function StickyCta() {
   const lead = useLead();
@@ -38,12 +38,12 @@ export default function StickyCta() {
         }
       >
         <div className="grid grid-cols-[repeat(4,minmax(0,1fr))_1.35fr] gap-1 rounded-3xl bg-ink/95 border border-white/10 p-1.5 shadow-2xl shadow-black/40">
-          <a href={PHONE_HREF} aria-label="Позвонить" className="flex flex-col items-center justify-center gap-1 rounded-2xl h-14 text-white active:bg-white/10">
+          <button onClick={() => lead.openCall()} aria-label="Позвонить" className="flex flex-col items-center justify-center gap-1 rounded-2xl h-14 text-white active:bg-white/10">
             <span className="call-blink relative w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
               <Phone className="call-blink-icon w-4 h-4 text-white fill-white" />
             </span>
             <span className="text-[10px] font-medium">Звонок</span>
-          </a>
+          </button>
           {MESSENGERS.map((m) => (
             <a
               key={m.id}

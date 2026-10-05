@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Menu, Phone, X, Wrench, Truck, Star } from "lucide-react";
 import Logo from "./Logo";
 import Messengers from "@/components/ui/Messengers";
+import Phones from "@/components/ui/Phones";
 import { useLead } from "@/components/lead/LeadProvider";
-import { NAV_LINKS, PHONE, PHONE_HREF, pic } from "@/lib/site";
+import { NAV_LINKS, pic } from "@/lib/site";
 
 const STATS = [
   { value: "19 лет", label: "работаем по югу России" },
@@ -66,10 +67,10 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/30 to-ink/85" />
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-3 md:px-8 pt-3 md:pt-5">
+      <nav className="fixed top-0 left-0 right-0 z-50 px-3 md:px-6 lg:px-3 xl:px-8 pt-3 md:pt-5">
         <div
           className={
-            "wrap flex items-center justify-between h-14 md:h-16 pl-4 pr-2 rounded-full border transition-colors duration-300 " +
+            "wrap flex items-center justify-between gap-3 h-14 md:h-16 pl-4 lg:pl-3 xl:pl-4 pr-2 rounded-full border transition-colors duration-300 " +
             (scrolled || menu ? "bg-ink/90 border-white/10 shadow-xl shadow-black/20 backdrop-blur-md" : "bg-white/[0.06] border-white/15 backdrop-blur-md")
           }
         >
@@ -77,30 +78,28 @@ export default function Hero() {
             <Logo />
           </a>
 
-          <div className="hidden xl:flex items-center gap-7">
+          <div className="hidden lg:flex items-center gap-4 xl:gap-7">
             {NAV_LINKS.map((item) => (
-              <a key={item.href} href={item.href} className="text-[15px] font-medium text-white/75 hover:text-white transition-colors">
+              <a key={item.href} href={item.href} className="text-[14px] xl:text-[15px] font-medium text-white/75 hover:text-white transition-colors whitespace-nowrap">
                 {item.label}
               </a>
             ))}
           </div>
 
           <div className="flex items-center gap-2">
-            <Messengers size={34} className="hidden md:flex pr-1" />
-            <a href={PHONE_HREF} className="hidden md:flex items-center gap-2 text-[15px] font-semibold text-white hover:text-amber transition-colors px-3 tabular-nums">
-              <Phone className="w-4 h-4" /> {PHONE}
-            </a>
-            <a href={PHONE_HREF} aria-label="Позвонить" className="call-blink md:hidden relative w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center">
+            <Messengers size={30} className="hidden md:flex gap-1.5 xl:gap-2" />
+            <Phones variant="stack" className="hidden md:flex px-1" />
+            <button onClick={() => lead.openCall()} aria-label="Позвонить" className="call-blink md:hidden relative w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center">
               <Phone className="call-blink-icon w-[18px] h-[18px] text-white fill-white" />
-            </a>
-            <button onClick={callMaster} className="hidden sm:inline-flex btn btn-sm btn-primary">
+            </button>
+            <button onClick={callMaster} className="hidden lg:inline-flex btn btn-sm btn-primary px-4 xl:px-5">
               Вызвать мастера
             </button>
             <button
               onClick={() => setMenu((v) => !v)}
               aria-label={menu ? "Закрыть меню" : "Открыть меню"}
               aria-expanded={menu}
-              className="xl:hidden w-10 h-10 rounded-full bg-white text-ink flex items-center justify-center"
+              className="lg:hidden w-10 h-10 rounded-full bg-white text-ink flex items-center justify-center"
             >
               {menu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -109,16 +108,14 @@ export default function Hero() {
 
         {menu && (
             <div
-              className="anim-fade-in xl:hidden wrap mt-2 rounded-3xl bg-ink/95 border border-white/10 p-3 shadow-2xl"
+              className="anim-fade-in lg:hidden wrap mt-2 rounded-3xl bg-ink/95 border border-white/10 p-3 shadow-2xl"
             >
               {NAV_LINKS.map((item) => (
                 <a key={item.href} href={item.href} onClick={() => setMenu(false)} className="flex items-center h-14 px-4 rounded-2xl text-[17px] font-medium text-white active:bg-white/10">
                   {item.label}
                 </a>
               ))}
-              <a href={PHONE_HREF} className="flex items-center gap-2 h-14 px-4 text-[17px] font-semibold text-amber tabular-nums">
-                <Phone className="w-4 h-4" /> {PHONE}
-              </a>
+              <Phones className="px-4 py-3 text-[17px] text-amber" />
               <Messengers variant="pill" className="px-3 pb-3 flex-wrap" />
               <button onClick={() => { setMenu(false); callMaster(); }} className="btn btn-primary w-full mt-1">
                 Вызвать мастера бесплатно

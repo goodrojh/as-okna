@@ -4,7 +4,8 @@ import { Check, Loader2, MapPin, Clock, Phone } from "lucide-react";
 import Logo from "./Logo";
 import Reveal from "@/components/ui/Reveal";
 import { formatPhone, isPhoneValid, submitLead } from "@/lib/lead";
-import { NAV_LINKS, PHONE, PHONE_HREF, pic } from "@/lib/site";
+import { CONTACTS, NAV_LINKS, pic } from "@/lib/site";
+import Phones from "@/components/ui/Phones";
 import Messengers from "@/components/ui/Messengers";
 
 export default function Footer() {
@@ -67,9 +68,16 @@ export default function Footer() {
               </form>
             )}
             {err && <p className="text-[13px] text-red-300 mt-2">Введите номер полностью</p>}
-            <a href={PHONE_HREF} className="mt-6 inline-flex items-center gap-2 text-white font-display font-semibold text-[22px] md:text-[26px] tracking-[-0.02em] tabular-nums hover:text-amber transition-colors">
-              <Phone className="w-5 h-5" /> {PHONE}
-            </a>
+            <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8">
+              {CONTACTS.map((c) => (
+                <a key={c.href} href={c.href} className="group flex flex-col items-center tabular-nums">
+                  <span className="text-[13px] text-white/60">{c.name}</span>
+                  <span className="inline-flex items-center gap-2 text-white font-display font-semibold text-[22px] md:text-[24px] tracking-[-0.02em] group-hover:text-amber transition-colors">
+                    <Phone className="w-5 h-5" /> {c.phone}
+                  </span>
+                </a>
+              ))}
+            </div>
           </Reveal>
         </div>
 
@@ -95,7 +103,7 @@ export default function Footer() {
               <p className="text-white text-[14px] font-semibold mb-4">Контакты</p>
               <ul className="space-y-3 text-[14px] text-white/65">
                 <li>
-                  <a href={PHONE_HREF} className="flex items-center gap-2 hover:text-white tabular-nums"><Phone className="w-4 h-4 shrink-0" />{PHONE}</a>
+                  <Phones className="text-white/80" />
                 </li>
                 <li className="flex items-start gap-2"><MapPin className="w-4 h-4 mt-0.5 shrink-0" />Краснодар и пригороды: Яблоновский, Новая Адыгея, Знаменский, Пашковский</li>
                 <li className="flex items-center gap-2"><Clock className="w-4 h-4 shrink-0" />Ежедневно, 8:00–21:00</li>

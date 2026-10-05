@@ -1,9 +1,9 @@
 "use client";
 import React, { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { X, Check } from "lucide-react";
+import { X, Check, Phone } from "lucide-react";
 import LeadForm, { type LeadFormConfig } from "./LeadForm";
 import Quiz from "./Quiz";
-import { pic } from "@/lib/site";
+import { CONTACTS, pic } from "@/lib/site";
 import { useRussianTypography } from "@/lib/typography";
 
 export interface Article {
@@ -16,12 +16,15 @@ type ModalState =
   | { kind: "form"; config: LeadFormConfig }
   | { kind: "quiz"; preset?: string }
   | { kind: "article"; article: Article }
+  | { kind: "call" }
   | null;
 
 interface LeadApi {
   openForm: (config: LeadFormConfig) => void;
   openQuiz: (preset?: string) => void;
   openArticle: (article: Article) => void;
+  /** Phone sheet with both contacts (used by the mobile call buttons). */
+  openCall: () => void;
   close: () => void;
 }
 
@@ -60,6 +63,7 @@ export default function LeadProvider({ children }: { children: React.ReactNode }
       openForm: (config) => open({ kind: "form", config }),
       openQuiz: (preset) => open({ kind: "quiz", preset }),
       openArticle: (article) => open({ kind: "article", article }),
+      openCall: () => open({ kind: "call" }),
       close,
     }),
     [open, close]
@@ -105,6 +109,45 @@ export default function LeadProvider({ children }: { children: React.ReactNode }
           className="modal-overlay fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-ink/75 md:p-6"
           onClick={close}
         >
+          {state.kind === "call" ? (
+            <div
+              ref={dialogRef}
+              tabIndex={-1}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Позвонить"
+              onClick={(e) => e.stopPropagation()}
+              className="modal-panel relative w-full md:max-w-[420px] bg-cream rounded-t-3xl md:rounded-3xl shadow-2xl px-5 pt-4 pb-[max(20px,env(safe-area-inset-bottom))] md:p-8 outline-none"
+            >
+              <div className="md:hidden mx-auto mb-4 h-1.5 w-12 rounded-full bg-ink/15" aria-hidden />
+              <button
+                onClick={close}
+                aria-label="Закрыть"
+                className="absolute top-3 right-3 w-11 h-11 rounded-full bg-white border border-line flex items-center justify-center"
+              >
+                <X className="w-5 h-5 text-ink" />
+              </button>
+              <p className="t-h3 text-ink pr-12">Кому позвонить?</p>
+              <p className="t-body text-muted mt-1">Ответим и проконсультируем бесплатно</p>
+              <div className="mt-5 space-y-2.5">
+                {CONTACTS.map((c) => (
+                  <a
+                    key={c.href}
+                    href={c.href}
+                    className="flex items-center gap-4 rounded-2xl bg-white border border-line p-3 pr-4 active:scale-[0.98] transition-transform"
+                  >
+                    <span className="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
+                      <Phone className="w-5 h-5 text-white fill-white" />
+                    </span>
+                    <span className="flex-1 min-w-0">
+                      <span className="block text-[13px] text-muted">{c.name}</span>
+                      <span className="block text-[19px] font-semibold text-ink tabular-nums">{c.phone}</span>
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : (
           <div
             ref={dialogRef}
             tabIndex={-1}
@@ -167,6 +210,7 @@ export default function LeadProvider({ children }: { children: React.ReactNode }
               )}
             </div>
           </div>
+          )}
         </div>
       )}
     </LeadContext.Provider>
