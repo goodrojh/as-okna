@@ -1,7 +1,7 @@
-export const PHONE = "+7 000 000 00 00";
-export const PHONE_HREF = "tel:+70000000000";
+export const PHONE = "+7 961 440-00-14";
+export const PHONE_HREF = "tel:+79614400014";
 
-/** Number used for WhatsApp. */
+/** Number used for WhatsApp (same as the main phone). */
 export const MESSENGER_PHONE = "79614400014";
 export const WHATSAPP_HREF = `https://wa.me/${MESSENGER_PHONE}`;
 export const TELEGRAM_HREF = "https://t.me/As_okna";
