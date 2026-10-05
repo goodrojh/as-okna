@@ -10,7 +10,7 @@ import Messengers from "@/components/ui/Messengers";
 
 export default function Footer() {
   const [phone, setPhone] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "done">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [err, setErr] = useState(false);
 
   const send = async (e: React.FormEvent) => {
@@ -18,8 +18,12 @@ export default function Footer() {
     if (!isPhoneValid(phone)) return setErr(true);
     setErr(false);
     setStatus("sending");
-    await submitLead({ source: "Футер: жду звонка", phone }).catch(() => undefined);
-    setStatus("done");
+    try {
+      await submitLead({ source: "Футер: жду звонка", phone });
+      setStatus("done");
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -68,6 +72,7 @@ export default function Footer() {
               </form>
             )}
             {err && <p className="text-[13px] text-red-300 mt-2">Введите номер полностью</p>}
+            {status === "error" && <p className="text-[14px] text-red-300 mt-3">Не получилось отправить — позвоните нам по номерам ниже.</p>}
             <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8">
               {CONTACTS.map((c) => (
                 <a key={c.href} href={c.href} className="group flex flex-col items-center tabular-nums">

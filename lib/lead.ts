@@ -31,13 +31,20 @@ export async function submitLead(payload: LeadPayload): Promise<void> {
     return;
   }
   // text/plain + no-cors = "simple" request: Apps Script accepts it without a CORS preflight.
-  await fetch(LEAD_ENDPOINT, {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(body),
-    keepalive: true,
-  });
+  // Never hang the UI: if Google doesn't answer in 10 s, the form shows the phone numbers instead.
+  const ac = new AbortController();
+  const timer = setTimeout(() => ac.abort(), 10000);
+  try {
+    await fetch(LEAD_ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(body),
+      signal: ac.signal,
+    });
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 export function formatPhone(raw: string): string {

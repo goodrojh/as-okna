@@ -3,6 +3,7 @@ import React, { useMemo, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Building2, Clock, Gift, Home, Loader2, Store, Wrench, Square, Bug, Cog, Hand, Layers } from "lucide-react";
 import { formatPhone, isPhoneValid, submitLead } from "@/lib/lead";
 import { LeadSuccess } from "./LeadForm";
+import { CONTACTS } from "@/lib/site";
 
 const SERVICES = [
   { id: "repair", label: "Ремонт и регулировка", icon: Wrench, min: 800, max: 2500, unit: "окон", max_n: 12, countLabel: "Сколько окон нужно отремонтировать?", slow: false },
@@ -33,7 +34,7 @@ export default function Quiz({ compact = false, preset }: { compact?: boolean; p
   const [place, setPlace] = useState("");
   const [when, setWhen] = useState("");
   const [phone, setPhone] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "done">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [touched, setTouched] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -57,7 +58,8 @@ export default function Quiz({ compact = false, preset }: { compact?: boolean; p
     setTouched(true);
     if (!isPhoneValid(phone) || status === "sending") return;
     setStatus("sending");
-    await submitLead({
+    try {
+      await submitLead({
       source: compact ? "Квиз-калькулятор (окно)" : "Квиз-калькулятор (блок)",
       phone,
       details: {
@@ -67,8 +69,11 @@ export default function Quiz({ compact = false, preset }: { compact?: boolean; p
         Срок: when,
         Оценка: estimate ? fmt(estimate.min) + " – " + fmt(estimate.max) : "",
       },
-    }).catch(() => undefined);
-    setStatus("done");
+      });
+      setStatus("done");
+    } catch {
+      setStatus("error");
+    }
   };
 
   if (status === "done")
@@ -200,6 +205,11 @@ export default function Quiz({ compact = false, preset }: { compact?: boolean; p
                 <button type="submit" className="btn btn-primary w-full mt-3">
                   {status === "sending" ? <Loader2 className="w-5 h-5 animate-spin" /> : "Узнать точную стоимость"}
                 </button>
+                {status === "error" && (
+                  <p className={"mt-3 text-[14px] text-center " + (dark ? "text-red-300" : "text-red-600")}>
+                    Не получилось отправить. Позвоните: {CONTACTS.map((c) => c.name + " " + c.phone).join(", ")}
+                  </p>
+                )}
                 <p className={"mt-3 text-[12px] text-center " + (dark ? "text-white/45" : "text-ink/50")}>Нажимая кнопку, вы соглашаетесь с обработкой персональных данных</p>
               </form>
             )}
