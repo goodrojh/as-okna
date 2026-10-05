@@ -33,7 +33,7 @@ export function useLead() {
   return ctx;
 }
 
-const PERKS = ["Выезд и диагностика — бесплатно", "Цена фиксируется до начала работ", "Гарантия на работы до 3 лет"];
+const PERKS = ["Выезд и диагностика — бесплатно", "Стоимость называем до начала работ", "Гарантия на работы — 1 год"];
 
 export default function LeadProvider({ children }: { children: React.ReactNode }) {
   useRussianTypography();

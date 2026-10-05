@@ -56,7 +56,6 @@ export default function Brands() {
                   image: "repair",
                   withComment: true,
                   commentPlaceholder: "Марка профиля или фурнитуры (если знаете)",
-                  withTime: false,
                   cta: "Уточнить у мастера",
                 })
               }

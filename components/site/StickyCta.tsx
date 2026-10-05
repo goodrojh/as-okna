@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Phone, MessageCircle, Wrench } from "lucide-react";
+import { Phone, Wrench } from "lucide-react";
 import { useLead } from "@/components/lead/LeadProvider";
-import { PHONE_HREF, WHATSAPP_HREF } from "@/lib/site";
+import { MESSENGERS, PHONE_HREF, asset } from "@/lib/site";
 
 export default function StickyCta() {
   const lead = useLead();
@@ -37,15 +37,26 @@ export default function StickyCta() {
           (show ? visible : hidden)
         }
       >
-        <div className="grid grid-cols-[1fr_1fr_1.5fr] gap-1.5 rounded-3xl bg-ink/95 border border-white/10 p-1.5 shadow-2xl shadow-black/40">
-          <a href={PHONE_HREF} className="flex flex-col items-center justify-center gap-1 rounded-2xl h-14 text-white active:bg-white/10">
-            <Phone className="w-5 h-5" />
-            <span className="text-[11px] font-medium">Позвонить</span>
+        <div className="grid grid-cols-[repeat(4,minmax(0,1fr))_1.35fr] gap-1 rounded-3xl bg-ink/95 border border-white/10 p-1.5 shadow-2xl shadow-black/40">
+          <a href={PHONE_HREF} aria-label="Позвонить" className="flex flex-col items-center justify-center gap-1 rounded-2xl h-14 text-white active:bg-white/10">
+            <span className="call-blink relative w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
+              <Phone className="call-blink-icon w-4 h-4 text-white fill-white" />
+            </span>
+            <span className="text-[10px] font-medium">Звонок</span>
           </a>
-          <a href={WHATSAPP_HREF} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center justify-center gap-1 rounded-2xl h-14 text-white active:bg-white/10">
-            <MessageCircle className="w-5 h-5" />
-            <span className="text-[11px] font-medium">WhatsApp</span>
-          </a>
+          {MESSENGERS.map((m) => (
+            <a
+              key={m.id}
+              href={m.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={"Написать в " + m.label}
+              className="flex flex-col items-center justify-center gap-1 rounded-2xl h-14 text-white active:bg-white/10"
+            >
+              <img src={asset(m.icon)} alt="" width={32} height={32} className="w-8 h-8 rounded-full" />
+              <span className="text-[10px] font-medium">{m.label}</span>
+            </a>
+          ))}
           <button
             onClick={() =>
               lead.openForm({
@@ -56,9 +67,10 @@ export default function StickyCta() {
                 withComment: true,
               })
             }
-            className="flex items-center justify-center gap-2 rounded-2xl h-14 bg-amber text-ink font-semibold text-[15px] active:bg-amber-dark"
+            className="flex flex-col items-center justify-center gap-1 rounded-2xl h-14 bg-amber text-ink font-semibold active:bg-amber-dark"
           >
-            <Wrench className="w-4 h-4" /> Мастер
+            <Wrench className="w-5 h-5" />
+            <span className="text-[11px]">Мастер</span>
           </button>
         </div>
       </div>

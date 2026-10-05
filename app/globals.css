@@ -394,3 +394,51 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Mobile call button: green, pulsing ring + periodic "ringing" shake (transform/opacity only) */
+@keyframes call-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+@keyframes call-shake {
+  0%,
+  60%,
+  100% {
+    transform: rotate(0);
+  }
+  65%,
+  75%,
+  85% {
+    transform: rotate(-16deg);
+  }
+  70%,
+  80%,
+  90% {
+    transform: rotate(16deg);
+  }
+}
+.call-blink::before,
+.call-blink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #10b981;
+  z-index: -1;
+  animation: call-ring 1.6s ease-out infinite;
+}
+.call-blink::after {
+  animation-delay: 0.8s;
+}
+.call-blink {
+  isolation: isolate;
+}
+.call-blink-icon {
+  animation: call-shake 2s ease-in-out infinite;
+}

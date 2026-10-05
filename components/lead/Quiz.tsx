@@ -1,15 +1,16 @@
 "use client";
 import React, { useMemo, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Building2, Clock, Gift, Home, Loader2, Store, Wrench, Square, Bug, Sun, Frame } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2, Clock, Gift, Home, Loader2, Store, Wrench, Square, Bug, Cog, Hand, Layers } from "lucide-react";
 import { formatPhone, isPhoneValid, submitLead } from "@/lib/lead";
 import { LeadSuccess } from "./LeadForm";
 
 const SERVICES = [
-  { id: "repair", label: "Ремонт и регулировка", icon: Wrench, min: 800, max: 2500, unit: "окон", max_n: 12, countLabel: "Сколько окон нужно отремонтировать?" },
-  { id: "glass", label: "Замена стеклопакета", icon: Square, min: 3500, max: 9000, unit: "стеклопакетов", max_n: 12, countLabel: "Сколько стеклопакетов заменить?" },
-  { id: "net", label: "Москитные сетки", icon: Bug, min: 1000, max: 2500, unit: "сеток", max_n: 12, countLabel: "Сколько нужно сеток?" },
-  { id: "new", label: "Новые окна", icon: Frame, min: 18000, max: 42000, unit: "окон", max_n: 12, countLabel: "Сколько окон установить?" },
-  { id: "balcony", label: "Остекление балкона", icon: Sun, min: 14000, max: 30000, unit: "м длины", max_n: 8, countLabel: "Какая длина балкона, в метрах?" },
+  { id: "repair", label: "Ремонт и регулировка", icon: Wrench, min: 800, max: 2500, unit: "окон", max_n: 12, countLabel: "Сколько окон нужно отремонтировать?", slow: false },
+  { id: "fittings", label: "Замена фурнитуры", icon: Cog, min: 1500, max: 4500, unit: "окон", max_n: 12, countLabel: "На скольких окнах заменить фурнитуру?", slow: false },
+  { id: "handles", label: "Замена ручек", icon: Hand, min: 500, max: 1200, unit: "ручек", max_n: 12, countLabel: "Сколько ручек заменить?", slow: false },
+  { id: "seal", label: "Уплотнительная резина", icon: Layers, min: 1200, max: 2200, unit: "окон", max_n: 12, countLabel: "На скольких окнах заменить уплотнитель?", slow: false },
+  { id: "glass", label: "Замена стеклопакета", icon: Square, min: 3500, max: 9000, unit: "стеклопакетов", max_n: 12, countLabel: "Сколько стеклопакетов заменить?", slow: true },
+  { id: "net", label: "Москитные сетки", icon: Bug, min: 1000, max: 2500, unit: "сеток", max_n: 12, countLabel: "Сколько нужно сеток?", slow: true },
 ];
 
 const PLACES = [
@@ -18,7 +19,9 @@ const PLACES = [
   { id: "office", label: "Офис / магазин", icon: Store },
 ];
 
-const WHEN = ["Срочно, сегодня-завтра", "На этой неделе", "Пока узнаю цену"];
+const WHEN_FAST = ["Срочно, сегодня-завтра", "На этой неделе", "Пока узнаю цену"];
+// Glass units and mosquito nets are made to order — always within a week, never "today"
+const WHEN_SLOW = ["В течение недели", "Пока узнаю цену"];
 const TOTAL = 5;
 
 const fmt = (n: number) => (Math.round(n / 100) * 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " ₽";
@@ -151,7 +154,7 @@ export default function Quiz({ compact = false, preset }: { compact?: boolean; p
               <>
                 <h3 className={title}>Когда планируете?</h3>
                 <div className="grid gap-2.5">
-                  {WHEN.map((w) => (
+                  {(s?.slow ? WHEN_SLOW : WHEN_FAST).map((w) => (
                     <button key={w} className={optionCls(when === w)} onClick={() => { setWhen(w); goTo(4, 180); }}>
                       <Clock className="w-5 h-5 shrink-0" />
                       <span className="text-[15px] font-medium">{w}</span>
@@ -170,7 +173,7 @@ export default function Quiz({ compact = false, preset }: { compact?: boolean; p
                     <p className={"font-display font-semibold text-[24px] md:text-[30px] mt-1 tracking-[-0.02em] tabular-nums " + (dark ? "text-amber" : "text-ink")}>
                       {fmt(estimate.min)} – {fmt(estimate.max)}
                     </p>
-                    <p className={"text-[13px] mt-1 " + (dark ? "text-white/60" : "text-muted")}>Точную цену пришлём в течение 5 минут и зафиксируем в смете</p>
+                    <p className={"text-[13px] mt-1 " + (dark ? "text-white/60" : "text-muted")}>Точную цену назовёт мастер после короткого разговора</p>
                   </div>
                 )}
                 <div className={"mt-3 flex items-center gap-3 rounded-2xl px-4 py-3 " + (dark ? "bg-amber/15" : "bg-amber/20")}>

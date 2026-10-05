@@ -13,11 +13,8 @@ export interface LeadFormConfig {
   badge?: string;
   withComment?: boolean;
   commentPlaceholder?: string;
-  withTime?: boolean;
   details?: Record<string, string | number>;
 }
-
-const TIMES = ["Как можно скорее", "Сегодня вечером", "Завтра"];
 
 const inputBase =
   "w-full h-14 rounded-2xl bg-white border px-5 text-[16px] text-ink placeholder:text-ink/45 outline-none focus:ring-4 transition-[border-color,box-shadow] ";
@@ -29,7 +26,6 @@ export default function LeadForm({ config }: { config: LeadFormConfig }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [comment, setComment] = useState("");
-  const [time, setTime] = useState(TIMES[0]);
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [touched, setTouched] = useState(false);
 
@@ -47,7 +43,7 @@ export default function LeadForm({ config }: { config: LeadFormConfig }) {
         phone,
         name,
         comment,
-        details: { ...(config.details || {}), ...(config.withTime !== false ? { "Когда удобно": time } : {}) },
+        details: config.details,
       });
       setStatus("done");
     } catch {
@@ -101,27 +97,6 @@ export default function LeadForm({ config }: { config: LeadFormConfig }) {
           </div>
         )}
 
-        {config.withTime !== false && (
-          <fieldset>
-            <legend className="text-[13px] text-muted mb-2 ml-1">Когда удобно принять звонок?</legend>
-            <div className="flex flex-wrap gap-2">
-              {TIMES.map((t) => (
-                <button
-                  type="button"
-                  key={t}
-                  aria-pressed={time === t}
-                  onClick={() => setTime(t)}
-                  className={
-                    "rounded-full h-10 px-4 text-[14px] border transition-colors " +
-                    (time === t ? "bg-ink text-white border-ink" : "bg-white text-ink/75 border-line hover:border-ink/30")
-                  }
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-          </fieldset>
-        )}
       </div>
 
       <button type="submit" disabled={status === "sending"} className="btn btn-primary mt-7 w-full disabled:opacity-70">

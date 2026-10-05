@@ -80,7 +80,7 @@ function Visual03() {
       </div>
       <div className="bg-white rounded-lg px-3 py-2 w-fit flex items-center gap-2 shadow-lg">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-        <span className="text-[11px] font-semibold leading-none text-ink">Гарантия до 3 лет · в договоре</span>
+        <span className="text-[11px] font-semibold leading-none text-ink">Гарантия на работы · 1 год</span>
       </div>
     </div>
   );
@@ -88,8 +88,8 @@ function Visual03() {
 
 const STEPS = [
   { n: "01", image: "measure", alt: "Мастер согласует выезд", title: "Звоните или оставьте заявку", text: "Перезвоним за 5 минут, зададим пару вопросов и назовём ориентир по цене.", Visual: Visual01 },
-  { n: "02", image: "install", alt: "Мастер выполняет работы", title: "Мастер чинит за 1 визит", text: "Застилаем пол, работаем аккуратно, убираем за собой. Цена — как в смете, ни рублём больше.", Visual: Visual02 },
-  { n: "03", image: "night", alt: "Уютный вечер у тёплого окна", title: "Живёте в тепле с гарантией", text: "Письменная гарантия до 3 лет. Если что-то пойдёт не так — приедем и исправим бесплатно.", Visual: Visual03 },
+  { n: "02", image: "install", alt: "Мастер выполняет работы", title: "Мастер чинит за 1 визит", text: "Работаем аккуратно и быстро. Цена — ровно та, что назвал мастер, ни рублём больше.", Visual: Visual02 },
+  { n: "03", image: "night", alt: "Уютный вечер у тёплого окна", title: "Живёте в тепле с гарантией", text: "Гарантия на работы — 1 год. Если что-то пойдёт не так — приедем и исправим бесплатно.", Visual: Visual03 },
 ];
 
 export default function HowItWorks() {
@@ -143,7 +143,6 @@ export default function HowItWorks() {
                 image: "repair",
                 withComment: true,
                 commentPlaceholder: "Ваш вопрос",
-                withTime: false,
                 cta: "Получить консультацию",
               })
             }

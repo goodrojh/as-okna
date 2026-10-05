@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { Wind, Droplets, DoorClosed, Hand, Bug, Baby, Square, Home, Clock, Banknote, ArrowRight } from "lucide-react";
+import { Wind, Droplets, DoorClosed, Hand, Bug, Baby, Square, Layers, Clock, Banknote, ArrowRight } from "lucide-react";
 import { useLead } from "@/components/lead/LeadProvider";
 import { SectionHead } from "@/components/ui/Reveal";
 import { pic } from "@/lib/site";
@@ -9,14 +9,14 @@ const SYMPTOMS = [
   {
     id: "wind", icon: Wind, label: "Дует из окна",
     diagnosis: "Сбита регулировка прижима или износился уплотнитель",
-    fix: "Регулируем створки, меняем уплотнитель, переводим фурнитуру в зимний режим.",
+    fix: "Регулируем створки и переводим фурнитуру в зимний режим.",
     price: "от 500 ₽", time: "30–60 минут", image: "old",
   },
   {
     id: "fog", icon: Droplets, label: "Потеет стекло",
     diagnosis: "Разгерметизация стеклопакета или слабая вентиляция",
-    fix: "Проверяем стеклопакет, при необходимости меняем на энергосберегающий, настраиваем микропроветривание.",
-    price: "от 1 500 ₽/м²", time: "1–3 дня", image: "glass",
+    fix: "Проверяем стеклопакет, при необходимости меняем, настраиваем микропроветривание.",
+    price: "от 1 500 ₽/м²", time: "в течение недели", image: "glass",
   },
   {
     id: "close", icon: DoorClosed, label: "Плохо закрывается",
@@ -27,32 +27,32 @@ const SYMPTOMS = [
   {
     id: "handle", icon: Hand, label: "Сломалась ручка",
     diagnosis: "Износ или поломка механизма ручки",
-    fix: "Ставим новую ручку в тон окна — обычную, с ключом или кнопкой. Все ручки есть в машине мастера.",
+    fix: "Ставим новую ручку — обычную, с ключом или кнопкой. Все ручки есть в машине мастера.",
     price: "от 500 ₽", time: "15 минут", image: "lock",
   },
   {
     id: "net", icon: Bug, label: "Нужна сетка",
     diagnosis: "Летом в Краснодаре без москитной сетки никак",
     fix: "Замеряем и ставим рамочную, вставную или плиссе-сетку, в том числе «антикошку».",
-    price: "от 1 000 ₽", time: "1–2 дня", image: "net",
+    price: "от 1 000 ₽", time: "в течение недели", image: "net",
   },
   {
     id: "kids", icon: Baby, label: "Защита от детей",
     diagnosis: "Ребёнок может открыть окно сам",
-    fix: "Ставим ручки с ключом, блокираторы и ограничители открывания — окно откроет только взрослый.",
+    fix: "Ставим ручки с ключом и ограничители открывания — окно откроет только взрослый.",
     price: "от 500 ₽", time: "20 минут", image: "lock",
   },
   {
     id: "crack", icon: Square, label: "Трещина в стекле",
     diagnosis: "Нужна замена стеклопакета — раму менять не нужно",
     fix: "Замеряем, изготавливаем и меняем стеклопакет в той же раме. Без грязи и демонтажа окна.",
-    price: "от 1 500 ₽/м²", time: "2–4 дня", image: "glass",
+    price: "от 1 500 ₽/м²", time: "в течение недели", image: "glass",
   },
   {
-    id: "new", icon: Home, label: "Нужно новое окно",
-    diagnosis: "Старое окно не подлежит ремонту или хочется панорамы",
-    fix: "Бесплатный замер, монтаж по ГОСТ, откосы и подоконники. Остекление балконов и лоджий.",
-    price: "по замеру", time: "от 1 дня", image: "install",
+    id: "seal", icon: Layers, label: "Порвался уплотнитель",
+    diagnosis: "Резинка затвердела, потрескалась или порвалась",
+    fix: "Меняем уплотнительную резину по всему периметру створки — под ваш профиль.",
+    price: "300 ₽/м", time: "около 1 часа", image: "old",
   },
 ];
 

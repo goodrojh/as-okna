@@ -20,7 +20,7 @@ export default function QuizSection() {
               4 простых вопроса — и вы увидите вилку стоимости. Точную цену мастер пришлёт в течение 5 минут.
             </p>
             <ul className="mt-8 space-y-3">
-              {["Скидка 10% на работы за расчёт на сайте", "Цена фиксируется в смете", "Без навязывания — просто узнайте стоимость"].map((t) => (
+              {["Скидка 10% на работы за расчёт на сайте", "Цена фиксируется после разговора с мастером", "Без навязывания — просто узнайте стоимость"].map((t) => (
                 <li key={t} className="flex items-center gap-3 text-white/85 text-[15px]">
                   <span className="w-6 h-6 rounded-full bg-amber/15 border border-amber/40 flex items-center justify-center shrink-0">
                     <Check className="w-3.5 h-3.5 text-amber" />

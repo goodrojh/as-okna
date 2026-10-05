@@ -13,7 +13,7 @@ const plans = [
     unit: "за створку",
     isPopular: false,
     image: "repair",
-    features: ["Выезд и диагностика", "Регулировка прижима", "Чистка и смазка фурнитуры", "Проверка запоров и ручек", "Советы по уходу", "Гарантия 1 год"],
+    features: ["Выезд и диагностика", "Регулировка прижима", "Чистка и смазка фурнитуры", "Проверка запоров и ручек", "Советы по уходу", "Гарантия на работы — 1 год"],
   },
   {
     name: "Тёплая зима",
@@ -22,16 +22,7 @@ const plans = [
     unit: "за окно",
     isPopular: true,
     image: "night",
-    features: ["Всё из пакета «Сервис»", "Замена уплотнителя", "Перевод в зимний режим", "Герметизация швов", "Устранение продуваний", "Гарантия 2 года"],
-  },
-  {
-    name: "Под ключ",
-    tagline: "Новые окна и остекление балконов",
-    price: "по замеру",
-    unit: "замер бесплатно",
-    isPopular: false,
-    image: "house",
-    features: ["Бесплатный замер", "Демонтаж и вывоз мусора", "Монтаж по ГОСТ", "Откосы и подоконники", "Уборка после работ", "Гарантия 3 года"],
+    features: ["Всё из пакета «Сервис»", "Замена уплотнителя", "Перевод в зимний режим", "Герметизация швов", "Устранение продуваний", "Гарантия на работы — 1 год"],
   },
 ];
 
@@ -51,8 +42,8 @@ export default function Pricing() {
           <img {...pic("balcony")} alt="" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-deep/30" />
 
-          <div className="relative m-3 md:m-10 rounded-2xl overflow-hidden bg-white/80 backdrop-blur-md border border-white/50">
-            <div className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-ink/10">
+          <div className="relative m-3 md:m-10 lg:mx-auto lg:my-12 lg:max-w-[880px] rounded-2xl overflow-hidden bg-white/80 backdrop-blur-md border border-white/50">
+            <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-ink/10">
               {plans.map((plan) => (
                 <div key={plan.name} className={"flex flex-col p-6 md:p-8 " + (plan.isPopular ? "bg-white/70" : "")}>
                   <div className="flex items-center justify-between gap-2 min-h-[28px]">

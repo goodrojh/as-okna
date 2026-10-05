@@ -1,14 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Menu, Phone, X, Thermometer, Truck, Star } from "lucide-react";
+import { Menu, Phone, X, Wrench, Truck, Star } from "lucide-react";
 import Logo from "./Logo";
+import Messengers from "@/components/ui/Messengers";
 import { useLead } from "@/components/lead/LeadProvider";
 import { NAV_LINKS, PHONE, PHONE_HREF, pic } from "@/lib/site";
 
 const STATS = [
-  { value: "12 лет", label: "чиним окна в Краснодаре" },
+  { value: "19 лет", label: "работаем по югу России" },
   { value: "8 400+", label: "окон вернули к жизни" },
-  { value: "до 3 лет", label: "гарантия на работы" },
+  { value: "1 год", label: "гарантия на работы" },
   { value: "1 визит", label: "на большинство ремонтов" },
 ];
 
@@ -76,7 +77,7 @@ export default function Hero() {
             <Logo />
           </a>
 
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden xl:flex items-center gap-7">
             {NAV_LINKS.map((item) => (
               <a key={item.href} href={item.href} className="text-[15px] font-medium text-white/75 hover:text-white transition-colors">
                 {item.label}
@@ -85,11 +86,12 @@ export default function Hero() {
           </div>
 
           <div className="flex items-center gap-2">
+            <Messengers size={34} className="hidden md:flex pr-1" />
             <a href={PHONE_HREF} className="hidden md:flex items-center gap-2 text-[15px] font-semibold text-white hover:text-amber transition-colors px-3 tabular-nums">
               <Phone className="w-4 h-4" /> {PHONE}
             </a>
-            <a href={PHONE_HREF} aria-label="Позвонить" className="md:hidden w-10 h-10 rounded-full bg-white/10 border border-white/15 flex items-center justify-center">
-              <Phone className="w-4 h-4 text-white" />
+            <a href={PHONE_HREF} aria-label="Позвонить" className="call-blink md:hidden relative w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center">
+              <Phone className="call-blink-icon w-[18px] h-[18px] text-white fill-white" />
             </a>
             <button onClick={callMaster} className="hidden sm:inline-flex btn btn-sm btn-primary">
               Вызвать мастера
@@ -98,7 +100,7 @@ export default function Hero() {
               onClick={() => setMenu((v) => !v)}
               aria-label={menu ? "Закрыть меню" : "Открыть меню"}
               aria-expanded={menu}
-              className="lg:hidden w-10 h-10 rounded-full bg-white text-ink flex items-center justify-center"
+              className="xl:hidden w-10 h-10 rounded-full bg-white text-ink flex items-center justify-center"
             >
               {menu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -107,7 +109,7 @@ export default function Hero() {
 
         {menu && (
             <div
-              className="anim-fade-in lg:hidden wrap mt-2 rounded-3xl bg-ink/95 border border-white/10 p-3 shadow-2xl"
+              className="anim-fade-in xl:hidden wrap mt-2 rounded-3xl bg-ink/95 border border-white/10 p-3 shadow-2xl"
             >
               {NAV_LINKS.map((item) => (
                 <a key={item.href} href={item.href} onClick={() => setMenu(false)} className="flex items-center h-14 px-4 rounded-2xl text-[17px] font-medium text-white active:bg-white/10">
@@ -117,6 +119,7 @@ export default function Hero() {
               <a href={PHONE_HREF} className="flex items-center gap-2 h-14 px-4 text-[17px] font-semibold text-amber tabular-nums">
                 <Phone className="w-4 h-4" /> {PHONE}
               </a>
+              <Messengers variant="pill" className="px-3 pb-3 flex-wrap" />
               <button onClick={() => { setMenu(false); callMaster(); }} className="btn btn-primary w-full mt-1">
                 Вызвать мастера бесплатно
               </button>
@@ -128,11 +131,11 @@ export default function Hero() {
       <div className="hidden xl:flex absolute left-[4%] top-[58%] z-10 anim-fade-up" style={delay(1)}>
         <div className="anim-float flex items-center gap-3 rounded-2xl bg-ink/60 border border-white/15 px-4 py-3 shadow-2xl">
           <div className="w-10 h-10 rounded-xl bg-amber flex items-center justify-center">
-            <Thermometer className="w-5 h-5 text-ink" />
+            <Wrench className="w-5 h-5 text-ink" />
           </div>
           <div>
-            <p className="text-[13px] font-semibold text-white">Сквозняк устранён</p>
-            <p className="text-[12px] text-white/65">+5 °C в спальне · ул. Красная</p>
+            <p className="text-[13px] font-semibold text-white">Окно отрегулировано</p>
+            <p className="text-[12px] text-white/65">за 40 минут · ул. Красная</p>
           </div>
         </div>
       </div>
@@ -159,11 +162,11 @@ export default function Hero() {
           Окна, в&nbsp;которых <span className="text-amber">тепло</span>
         </h1>
         <p className="mt-3 md:mt-4 font-display font-medium text-white/90 text-[22px] md:text-[34px] leading-tight tracking-[-0.02em]">
-          Ремонт и установка за&nbsp;1&nbsp;визит
+          Ремонт и обслуживание за&nbsp;1&nbsp;визит
         </p>
 
         <p className="t-lead text-white/75 max-w-[560px] mt-5 md:mt-6">
-          Уберём сквозняк, отрегулируем фурнитуру, заменим стеклопакет или поставим новое окно. Цену фиксируем до начала работ.
+          Уберём сквозняк, отрегулируем и заменим фурнитуру, ручки, уплотнитель или стеклопакет. Стоимость мастер называет до начала работ.
         </p>
 
         <div className="mt-8 w-full sm:w-auto flex flex-col sm:flex-row gap-3 anim-fade-up" style={delay(0.1)}>
