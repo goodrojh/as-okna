@@ -1,15 +1,11 @@
 /**
  * AS·окна — приём заявок с сайта.
- * Каждая заявка: 1) строка в этой Google Таблице, 2) письмо на почту, 3) сообщение в WhatsApp.
+ * Каждая заявка: 1) строка в этой Google Таблице, 2) письмо на почту.
  *
  * Установка — см. integrations/README.md
  */
 
 const EMAIL = 'as.george@mail.ru';
-
-// WhatsApp через CallMeBot (бесплатно). Ключ приходит после активации — см. README.
-const WHATSAPP_PHONE = '+79614400014';
-const CALLMEBOT_APIKEY = ''; // ← вставьте ключ сюда
 
 const SHEET_NAME = 'Заявки';
 const HEADERS = ['Дата', 'Телефон', 'Имя', 'Откуда', 'Комментарий', 'Детали', 'Страница'];
@@ -64,15 +60,6 @@ function doPost(e) {
       subject: 'Заявка с сайта: ' + phone + ' — ' + clean_(data.source),
       body: text + '\nВсе заявки: ' + ss.getUrl(),
     });
-
-    // 3) WhatsApp
-    if (CALLMEBOT_APIKEY) {
-      UrlFetchApp.fetch(
-        'https://api.callmebot.com/whatsapp.php?phone=' + encodeURIComponent(WHATSAPP_PHONE) +
-          '&text=' + encodeURIComponent(text) + '&apikey=' + CALLMEBOT_APIKEY,
-        { muteHttpExceptions: true }
-      );
-    }
 
     return reply_({ ok: true });
   } catch (err) {
