@@ -54,7 +54,7 @@ function saveLead_(data) {
 
   // 1) Таблица
   const ss = getSpreadsheet_();
-  const sheet = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
+  const sheet = getLeadsSheet_(ss);
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(HEADERS);
     sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
@@ -110,6 +110,18 @@ function getSpreadsheet_() {
   props.setProperty('SPREADSHEET_ID', created.getId());
   console.log('Создана таблица: ' + created.getUrl());
   return created;
+}
+
+/** Лист «Заявки». Если его нет, а первый лист пустой — используем первый лист (переименовываем), чтобы не плодить вкладки. */
+function getLeadsSheet_(ss) {
+  const named = ss.getSheetByName(SHEET_NAME);
+  if (named) return named;
+  const first = ss.getSheets()[0];
+  if (first && first.getLastRow() === 0) {
+    first.setName(SHEET_NAME);
+    return first;
+  }
+  return ss.insertSheet(SHEET_NAME, 0); // новая вкладка — первой слева, чтобы её было видно
 }
 
 function clean_(v) {
