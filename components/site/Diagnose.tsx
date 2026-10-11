@@ -5,6 +5,9 @@ import { useLead } from "@/components/lead/LeadProvider";
 import { SectionHead } from "@/components/ui/Reveal";
 import { pic } from "@/lib/site";
 
+/** Soft hyphen (U+00AD): lets long words break with a hyphen on narrow phones. */
+const SHY = String.fromCharCode(173);
+
 const SYMPTOMS = [
   {
     id: "wind", icon: Wind, label: "Дует из окна",
@@ -19,7 +22,7 @@ const SYMPTOMS = [
     price: "от 1 500 ₽/м²", time: "в течение недели", image: "glass",
   },
   {
-    id: "close", icon: DoorClosed, label: "Плохо закрывается",
+    id: "close", icon: DoorClosed, label: "Плохо закры" + SHY + "вается",
     diagnosis: "Створка провисла, фурнитура забилась или сломалась",
     fix: "Поднимаем створку, чистим и смазываем механизм, меняем сломанные элементы фурнитуры.",
     price: "от 500 ₽", time: "около 40 минут", image: "repair",
@@ -49,7 +52,7 @@ const SYMPTOMS = [
     price: "от 1 500 ₽/м²", time: "в течение недели", image: "glass",
   },
   {
-    id: "seal", icon: Layers, label: "Порвался уплотнитель",
+    id: "seal", icon: Layers, label: "Порвался уплот" + SHY + "нитель",
     diagnosis: "Резинка затвердела, потрескалась или порвалась",
     fix: "Меняем уплотнительную резину по всему периметру створки — под ваш профиль.",
     price: "300 ₽/м", time: "около 1 часа", image: "old",
@@ -92,14 +95,14 @@ export default function Diagnose() {
                   aria-checked={on}
                   onClick={() => pick(s)}
                   className={
-                    "flex items-center gap-3 rounded-2xl p-3 md:p-4 min-h-[64px] text-left border transition-colors duration-200 active:scale-[0.98] " +
+                    "flex items-center gap-2 min-[360px]:gap-3 rounded-2xl p-2.5 min-[360px]:p-3 md:p-4 min-h-[64px] min-w-0 text-left border transition-colors duration-200 active:scale-[0.98] " +
                     (on ? "bg-ink border-ink text-white" : "bg-white border-line text-ink hover:border-ink/30")
                   }
                 >
-                  <span className={"w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors " + (on ? "bg-amber text-ink" : "bg-frost text-deep")}>
+                  <span className={"w-8 h-8 min-[360px]:w-10 min-[360px]:h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors " + (on ? "bg-amber text-ink" : "bg-frost text-deep")}>
                     <s.icon className="w-5 h-5" />
                   </span>
-                  <span className="text-[14px] md:text-[15px] font-semibold leading-tight">{s.label}</span>
+                  <span className="min-w-0 text-[13px] min-[360px]:text-[14px] md:text-[15px] font-semibold leading-tight hyphens-auto [overflow-wrap:anywhere]">{s.label}</span>
                 </button>
               );
             })}

@@ -1,3 +1,6 @@
+export const SITE_URL = "https://as-okna23.ru";
+export const YANDEX_METRIKA_ID = 44147844;
+
 /** Two contact people. Георгий is the master (also on WhatsApp). */
 export const CONTACTS = [
   { name: "Георгий", phone: "+7 961 440-00-14", href: "tel:+79614400014" },

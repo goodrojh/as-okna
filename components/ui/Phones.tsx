@@ -10,9 +10,9 @@ import { CONTACTS } from "@/lib/site";
 export default function Phones({ variant = "list", className = "" }: { variant?: "stack" | "list"; className?: string }) {
   if (variant === "stack") {
     return (
-      <div className={"flex flex-col justify-center gap-0.5 " + className}>
+      <div className={"flex flex-col justify-center " + className}>
         {CONTACTS.map((c) => (
-          <a key={c.href} href={c.href} className="group flex items-baseline gap-2 leading-none whitespace-nowrap">
+          <a key={c.href} href={c.href} className="group flex items-center gap-2 h-6 leading-none whitespace-nowrap">
             <span className="text-[11px] text-white/55 w-[54px]">{c.name}</span>
             <span className="text-[14px] font-semibold text-white group-hover:text-amber transition-colors tabular-nums">{c.phone}</span>
           </a>

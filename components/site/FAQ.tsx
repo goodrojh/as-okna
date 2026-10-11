@@ -67,11 +67,11 @@ export default function FAQ() {
                   aria-expanded={open}
                   className="w-full flex justify-between items-center gap-4 text-left py-5"
                 >
-                  <span className="text-[16px] font-semibold text-ink">{item.question}</span>
+                  <span className="flex-1 min-w-0 text-[15px] min-[360px]:text-[16px] font-semibold text-ink">{item.question}</span>
                   <span
-                    className={"w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-[transform,background-color] duration-300 " + (open ? "bg-amber text-ink rotate-45" : "bg-cream text-ink")}
+                    className={"w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors duration-300 " + (open ? "bg-amber text-ink" : "bg-cream text-ink")}
                   >
-                    <Plus size={16} strokeWidth={2} />
+                    <Plus size={16} strokeWidth={2} className={"transition-transform duration-300 " + (open ? "rotate-45" : "")} />
                   </span>
                 </button>
                 <div className="accordion" data-open={open} aria-hidden={!open}>

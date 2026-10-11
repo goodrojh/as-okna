@@ -1,3 +1,5 @@
+import { YANDEX_METRIKA_ID } from "./site";
+
 /**
  * Google Apps Script web-app URL (see integrations/google-apps-script.gs).
  * The script writes every lead to the Google Sheet and emails it.
@@ -6,6 +8,9 @@
 export const LEAD_ENDPOINT =
   process.env.NEXT_PUBLIC_LEAD_ENDPOINT ||
   "https://script.google.com/macros/s/AKfycbx34CxudVVbWn4RkuI7KkZ4DrSBrh_uyHheW1jWUpqJ76oTmozPBjdQ5bfqyIuNvfOy/exec";
+
+/** Soft hyphen (U+00AD), written as a char code so it stays visible in source. */
+const SHY = String.fromCharCode(173);
 
 export interface LeadPayload {
   source: string;
@@ -20,6 +25,7 @@ const loadedAt = typeof performance !== "undefined" ? performance.now() : 0;
 export async function submitLead(payload: LeadPayload): Promise<void> {
   const body = {
     ...payload,
+    source: payload.source.split(SHY).join(""), // strip soft hyphens that UI labels use for line breaking
     page: typeof window !== "undefined" ? window.location.href : "",
     at: new Date().toISOString(),
     // time on page in ms — the script rejects instant (bot) submissions
@@ -45,6 +51,9 @@ export async function submitLead(payload: LeadPayload): Promise<void> {
   } finally {
     clearTimeout(timer);
   }
+  // Yandex.Metrika goal «lead» (only after the request went out)
+  const ym = (window as unknown as { ym?: (...a: unknown[]) => void }).ym;
+  ym?.(YANDEX_METRIKA_ID, "reachGoal", "lead", { source: payload.source });
 }
 
 export function formatPhone(raw: string): string {
