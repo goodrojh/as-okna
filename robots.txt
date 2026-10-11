@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: https://as-okna23.ru
+Sitemap: https://as-okna23.ru/sitemap.xml
