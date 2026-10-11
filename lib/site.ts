@@ -1,3 +1,5 @@
+import { MAX_ICON_DATA_URI } from "./max-icon";
+
 export const SITE_URL = "https://as-okna23.ru";
 export const YANDEX_METRIKA_ID = 44147844;
 
@@ -25,7 +27,8 @@ export function img(name: string) {
 }
 
 export function asset(path: string) {
-  return `${base}${path}`;
+  // inline data URIs are used as-is
+  return path.startsWith("data:") ? path : `${base}${path}`;
 }
 
 /** Responsive <img> attributes: 800px variant for phones, full size for desktop. */
@@ -43,7 +46,7 @@ export function thumb(name: string) {
 
 /** Official messenger logos (files in /public/icons, not redrawn). */
 export const MESSENGERS = [
-  { id: "max", label: "MAX", href: MAX_HREF, icon: "/icons/max.webp" },
+  { id: "max", label: "MAX", href: MAX_HREF, icon: MAX_ICON_DATA_URI },
   { id: "telegram", label: "Telegram", href: TELEGRAM_HREF, icon: "/icons/telegram.svg" },
   { id: "whatsapp", label: "WhatsApp", href: WHATSAPP_HREF, icon: "/icons/whatsapp.svg" },
 ] as const;
