@@ -1,7 +1,7 @@
 import { MAX_ICON_DATA_URI } from "./max-icon";
 
 export const SITE_URL = "https://as-okna23.ru";
-export const YANDEX_METRIKA_ID = 44147844;
+export const YANDEX_METRIKA_ID = 113697252;
 
 /** Two contact people. Георгий is the master (also on WhatsApp). */
 export const CONTACTS = [

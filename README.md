@@ -43,5 +43,5 @@ GITHUB_PAGES=true npm run build
 
 ## Аналитика и заявки
 
-- Яндекс Метрика 44147844 (`lib/site.ts`), цели: `lead`, `call`, `messenger`.
+- Яндекс Метрика 113697252 (`lib/site.ts`), цели: `lead`, `call`, `messenger`.
 - Заявки → Google Таблица + почта: `integrations/`.

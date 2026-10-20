@@ -58,30 +58,26 @@ const jsonLd = {
 };
 
 /*
- * Yandex.Metrika. Loaded on the first user action (or after 6 s) so it never slows down the first screen.
- * Goals sent from the site (create them in Metrika as «JavaScript-событие»):
- *   lead      — заявка отправлена (любая форма / калькулятор)
- *   call      — клик по номеру телефона
- *   messenger — клик по MAX / Telegram / WhatsApp
+ * Yandex.Metrika — official counter code (unchanged, as issued in Metrika → Настройки → Счётчик).
+ * The script loads async and does not block rendering.
  */
-const metrika = `
-(function(){
-  var ID=${YANDEX_METRIKA_ID};
-  window.ym=window.ym||function(){(window.ym.a=window.ym.a||[]).push(arguments)};window.ym.l=1*new Date();
-  ym(ID,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});
-  var done=false,EV=["scroll","pointerdown","keydown","touchstart","mousemove"];
-  function load(){if(done)return;done=true;EV.forEach(function(e){window.removeEventListener(e,load)});
-    var s=document.createElement("script");s.async=1;s.src="https://mc.yandex.ru/metrika/tag.js";document.head.appendChild(s);}
-  // Load on the visitor's first action, or after 6 s — the first screen never waits for the counter.
-  EV.forEach(function(e){window.addEventListener(e,load,{once:true,passive:true})});
-  setTimeout(load,6000);
-  document.addEventListener("click",function(e){
-    var a=e.target&&e.target.closest&&e.target.closest("a[href]");if(!a)return;
-    var h=a.getAttribute("href")||"";
-    if(h.indexOf("tel:")===0)ym(ID,"reachGoal","call",{phone:h.slice(4)});
-    else if(/wa\\.me|t\\.me|max\\.ru/.test(h))ym(ID,"reachGoal","messenger",{to:a.getAttribute("aria-label")||h});
-  },{capture:true,passive:true});
-})();`;
+const metrika = `(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js?id=${YANDEX_METRIKA_ID}", "ym");
+ym(${YANDEX_METRIKA_ID}, "init", {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});`;
+
+/*
+ * Goals sent from the site (create them in Metrika as «JavaScript-событие»):
+ *   lead — заявка отправлена · call — клик по номеру · messenger — клик по MAX / Telegram / WhatsApp
+ */
+const metrikaGoals = `document.addEventListener("click",function(e){
+  var a=e.target&&e.target.closest&&e.target.closest("a[href]");if(!a||!window.ym)return;
+  var h=a.getAttribute("href")||"";
+  if(h.indexOf("tel:")===0)ym(${YANDEX_METRIKA_ID},"reachGoal","call",{phone:h.slice(4)});
+  else if(/wa\.me|t\.me|max\.ru/.test(h))ym(${YANDEX_METRIKA_ID},"reachGoal","messenger",{to:a.getAttribute("aria-label")||h});
+},{capture:true,passive:true});`;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -99,7 +95,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           fetchPriority="high"
         />
         <link rel="dns-prefetch" href="https://mc.yandex.ru" />
-        <script dangerouslySetInnerHTML={{ __html: metrika }} />
+        <script type="text/javascript" dangerouslySetInnerHTML={{ __html: metrika }} />
+        <script dangerouslySetInnerHTML={{ __html: metrikaGoals }} />
       </head>
       <body>
         {children}
